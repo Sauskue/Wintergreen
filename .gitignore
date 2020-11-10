@@ -214,6 +214,8 @@ _pkginfo.txt
 !?*.[Cc]ache/
 
 # Others
+Sandbox/build/
+Wintergreen/build/
 ClientBin/
 ~$*
 *~
