@@ -29,7 +29,7 @@ project "Wintergreen"
 
 	includedirs
 	{
-		
+		"../%{prj.name}/src"
 	}
 
 	filter "files:**-p.hlsl"
@@ -82,7 +82,7 @@ project "Sandbox"
 
 	includedirs
 	{
-		"../Wintergreen/include"
+		"../Wintergreen/src"
 	}
 
 	links
