@@ -32,6 +32,7 @@
     <ProjectGuid>{29e449bd-2097-49ca-a150-ceb410a791d3}</ProjectGuid>
     <RootNamespace>PyrolaWintergreenEditor</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Pyrola</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -100,33 +101,39 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(ProjectDir)bin\$(SDKIdentifier)-$(Platform)-$(Configuration)</OutDir>
-    <IntDir>$(ProjectDir)bin-int\$(SDKIdentifier)-$(Platform)-$(Configuration)</IntDir>
+    <OutDir>$(ProjectDir)bin\$(SDKIdentifier)-$(Platform)-$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)bin-int\$(SDKIdentifier)-$(Platform)-$(Configuration)\</IntDir>
+    <TargetName>Pyrola</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(ProjectDir)bin\$(SDKIdentifier)-$(Platform)-$(Configuration)</OutDir>
-    <IntDir>$(ProjectDir)bin-int\$(SDKIdentifier)-$(Platform)-$(Configuration)</IntDir>
+    <OutDir>$(ProjectDir)bin\$(SDKIdentifier)-$(Platform)-$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)bin-int\$(SDKIdentifier)-$(Platform)-$(Configuration)\</IntDir>
+    <TargetName>Pyrola</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Ship|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(ProjectDir)bin\$(SDKIdentifier)-$(Platform)-$(Configuration)</OutDir>
-    <IntDir>$(ProjectDir)bin-int\$(SDKIdentifier)-$(Platform)-$(Configuration)</IntDir>
+    <OutDir>$(ProjectDir)bin\$(SDKIdentifier)-$(Platform)-$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)bin-int\$(SDKIdentifier)-$(Platform)-$(Configuration)\</IntDir>
+    <TargetName>Pyrola</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(ProjectDir)bin\$(SDKIdentifier)-$(Platform)-$(Configuration)</OutDir>
-    <IntDir>$(ProjectDir)bin-int\$(SDKIdentifier)-$(Platform)-$(Configuration)</IntDir>
+    <OutDir>$(ProjectDir)bin\$(SDKIdentifier)-$(Platform)-$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)bin-int\$(SDKIdentifier)-$(Platform)-$(Configuration)\</IntDir>
+    <TargetName>Pyrola</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(ProjectDir)bin\$(SDKIdentifier)-$(Platform)-$(Configuration)</OutDir>
-    <IntDir>$(ProjectDir)bin-int\$(SDKIdentifier)-$(Platform)-$(Configuration)</IntDir>
+    <OutDir>$(ProjectDir)bin\$(SDKIdentifier)-$(Platform)-$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)bin-int\$(SDKIdentifier)-$(Platform)-$(Configuration)\</IntDir>
+    <TargetName>Pyrola</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Ship|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(ProjectDir)bin\$(SDKIdentifier)-$(Platform)-$(Configuration)</OutDir>
-    <IntDir>$(ProjectDir)bin-int\$(SDKIdentifier)-$(Platform)-$(Configuration)</IntDir>
+    <OutDir>$(ProjectDir)bin\$(SDKIdentifier)-$(Platform)-$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)bin-int\$(SDKIdentifier)-$(Platform)-$(Configuration)\</IntDir>
+    <TargetName>Pyrola</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
