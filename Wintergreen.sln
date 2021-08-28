@@ -3,7 +3,45 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31605.320
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Moneses - Wintergreen Engine", "Moneses\Moneses.vcxproj", "{9F00320C-6B2E-4C37-A3EB-6FBD0EF2AC35}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pyrola - Wintergreen Editor", "Pyrola\Pyrola.vcxproj", "{87C09323-DE2B-4226-8423-4C3FA3F93E82}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Starflower - Wintergreen Sandbox", "Starflower\Starflower.vcxproj", "{446B8097-40FD-4E9E-9508-BACC34D44E07}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F00320C-6B2E-4C37-A3EB-6FBD0EF2AC35}.Debug|x64.ActiveCfg = Debug|x64
+		{9F00320C-6B2E-4C37-A3EB-6FBD0EF2AC35}.Debug|x64.Build.0 = Debug|x64
+		{9F00320C-6B2E-4C37-A3EB-6FBD0EF2AC35}.Debug|x86.ActiveCfg = Debug|Win32
+		{9F00320C-6B2E-4C37-A3EB-6FBD0EF2AC35}.Debug|x86.Build.0 = Debug|Win32
+		{9F00320C-6B2E-4C37-A3EB-6FBD0EF2AC35}.Release|x64.ActiveCfg = Release|x64
+		{9F00320C-6B2E-4C37-A3EB-6FBD0EF2AC35}.Release|x64.Build.0 = Release|x64
+		{9F00320C-6B2E-4C37-A3EB-6FBD0EF2AC35}.Release|x86.ActiveCfg = Release|Win32
+		{9F00320C-6B2E-4C37-A3EB-6FBD0EF2AC35}.Release|x86.Build.0 = Release|Win32
+		{87C09323-DE2B-4226-8423-4C3FA3F93E82}.Debug|x64.ActiveCfg = Debug|x64
+		{87C09323-DE2B-4226-8423-4C3FA3F93E82}.Debug|x64.Build.0 = Debug|x64
+		{87C09323-DE2B-4226-8423-4C3FA3F93E82}.Debug|x86.ActiveCfg = Debug|Win32
+		{87C09323-DE2B-4226-8423-4C3FA3F93E82}.Debug|x86.Build.0 = Debug|Win32
+		{87C09323-DE2B-4226-8423-4C3FA3F93E82}.Release|x64.ActiveCfg = Release|x64
+		{87C09323-DE2B-4226-8423-4C3FA3F93E82}.Release|x64.Build.0 = Release|x64
+		{87C09323-DE2B-4226-8423-4C3FA3F93E82}.Release|x86.ActiveCfg = Release|Win32
+		{87C09323-DE2B-4226-8423-4C3FA3F93E82}.Release|x86.Build.0 = Release|Win32
+		{446B8097-40FD-4E9E-9508-BACC34D44E07}.Debug|x64.ActiveCfg = Debug|x64
+		{446B8097-40FD-4E9E-9508-BACC34D44E07}.Debug|x64.Build.0 = Debug|x64
+		{446B8097-40FD-4E9E-9508-BACC34D44E07}.Debug|x86.ActiveCfg = Debug|Win32
+		{446B8097-40FD-4E9E-9508-BACC34D44E07}.Debug|x86.Build.0 = Debug|Win32
+		{446B8097-40FD-4E9E-9508-BACC34D44E07}.Release|x64.ActiveCfg = Release|x64
+		{446B8097-40FD-4E9E-9508-BACC34D44E07}.Release|x64.Build.0 = Release|x64
+		{446B8097-40FD-4E9E-9508-BACC34D44E07}.Release|x86.ActiveCfg = Release|Win32
+		{446B8097-40FD-4E9E-9508-BACC34D44E07}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
