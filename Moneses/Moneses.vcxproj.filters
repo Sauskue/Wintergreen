@@ -8,11 +8,11 @@
     <Filter Include="src\include">
       <UniqueIdentifier>{073a3803-4cb6-4a4f-87a2-01b7acf55ede}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\include\WG">
+      <UniqueIdentifier>{06443a8f-ac5d-49f4-8d19-c798c8da6c2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -24,9 +24,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\include\Wintergreen.h">
-      <Filter>src\include</Filter>
-    </ClInclude>
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -35,6 +32,9 @@
     </ClInclude>
     <ClInclude Include="src\InfoQueue.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\WG\Engine.h">
+      <Filter>src\include\WG</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

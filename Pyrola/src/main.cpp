@@ -1,5 +1,1 @@
-#include "Wintergreen.h"
-int main()
-{
-
-}
+#include "WG/Engine.h"

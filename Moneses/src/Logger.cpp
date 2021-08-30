@@ -8,11 +8,10 @@ bool Logger::multi_params;
 int Logger::count;
 std::stringstream Logger::combined_text;
 const char* Logger::label;
-extern bool debug_on;
 
 void Logger::Init()
 {
-    if (initialized || !debug_on)
+    if (initialized)
         return;
     console_handle = GetStdHandle(STD_OUTPUT_HANDLE);
     SetLevel(LogLevel::Default);
@@ -28,8 +27,6 @@ void Logger::Cleanup()
 
 void Logger::PrintLog()
 {
-    if (!debug_on)
-        return;
     if (!initialized)
     {
         return;

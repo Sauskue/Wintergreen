@@ -3,11 +3,10 @@
 
 static IDXGIInfoQueue* dxgi_info_queue;
 static bool initialized = false;
-extern bool debug_on;
 
 void InfoQueue::Init()
 {
-    if (initialized || !debug_on)
+    if (initialized)
         return;
     typedef HRESULT(WINAPI* DXGIGDIFP)(REFIID, void**);
     HMODULE dxgi_debug_dll = LoadLibraryEx(L"dxgidebug.dll", NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
@@ -40,8 +39,6 @@ void InfoQueue::Init()
 
 void InfoQueue::ProcessMessages()
 {
-    if (!debug_on)
-        return;
     if (!initialized)
     {
         LOG("DXGIInfoQueue has not been initialized yet", LogLevel::Error);
