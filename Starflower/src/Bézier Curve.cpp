@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Demos.h"
 #pragma comment(lib, "d2d1")
 #pragma comment(lib, "dwrite")
 
@@ -70,7 +71,7 @@ LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				dot.radiusX = radius;
 				dot.radiusY = radius;
 				dots.push_back(dot);
-				index = dots.size() - 1;
+				index = (int)dots.size() - 1;
 			}
 			InvalidateRect(hWnd, NULL, TRUE);
 			break;
@@ -106,7 +107,7 @@ LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 					index--;
 			}
 			if (index < 0)
-				index = dots.size() - 1;
+				index = (int)dots.size() - 1;
 			else if (index > (int)dots.size() - 1)
 				index = 0;
 			InvalidateRect(hWnd, NULL, TRUE);
@@ -122,7 +123,7 @@ LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 			//draw points/line at every layer
 			std::vector<D2D1_ELLIPSE> temp = dots;
-			for (int j = 0; j < dots.size(); j++)
+			for (int j = 0; j < (int)dots.size(); j++)
 			{
 				//if only 1 dot, no need to draw lines
 				if (dots.size() == 1)
@@ -135,7 +136,7 @@ LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				{
 					std::vector<D2D1_ELLIPSE> pois = temp;
 					temp.clear();
-					for (int k = 0; k < pois.size(); k++)
+					for (int k = 0; k < (int)pois.size(); k++)
 					{
 						if (pois.size() == 1)
 						{
@@ -205,7 +206,7 @@ LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	return 0;
 }
 
-int main()
+int RunBézierCurveDemo()
 {
 	
 	WNDCLASS wc =
@@ -249,7 +250,7 @@ int main()
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) != 0)
 		{
 			if (msg.message == WM_QUIT)
-				return msg.wParam;
+				return (int)msg.wParam;
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
