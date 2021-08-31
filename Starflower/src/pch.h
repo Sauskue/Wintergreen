@@ -1,12 +1,14 @@
 #pragma once
-//#include "Logger.h"
+#define NOMINMAX
 
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <time.h>
 #include <vector>
 #include <queue>
 #include <bitset>
+#include <chrono>
 
 #include <d2d1.h>
 #include <dwrite.h>
@@ -17,3 +19,4 @@
 
 #include <Windows.h>
 #include <windowsx.h>
+

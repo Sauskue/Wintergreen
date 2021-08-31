@@ -12,7 +12,7 @@ const int height = 600;
 int index = 0;
 const float radius = 7.0f;
 float t = 0.5f;
-const float speed = 0.02f;
+const float speed = 1.0f;
 bool hide_lines = false;
 const float dark_grey = 0.1f;
 
@@ -244,8 +244,15 @@ int BézierCurveDemo()
 		NULL
 		
 	);
+	float frame_delta;
+	std::chrono::steady_clock::time_point last_time = std::chrono::high_resolution_clock::now();
 	while (true)
 	{
+
+		std::chrono::duration<float> elapsed_time = std::chrono::high_resolution_clock::now() - last_time;
+		frame_delta = elapsed_time.count();
+		last_time = std::chrono::high_resolution_clock::now();
+
 		MSG msg;
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) != 0)
 		{
@@ -265,9 +272,9 @@ int BézierCurveDemo()
 			}
 		}
 		if (GetKeyState(VK_LEFT) >> 15)
-			t -= speed;
+			t -= speed * frame_delta;
 		if (GetKeyState(VK_RIGHT) >> 15)
-			t += speed;
+			t += speed * frame_delta;
 		if (t <= 0.0f)
 			t = 0.0f;
 		if (t >= 1.0f)
