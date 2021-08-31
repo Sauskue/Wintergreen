@@ -1,9 +1,12 @@
 #include "pch.h"
 #pragma comment(lib, "d2d1")
+#pragma comment(lib, "dwrite")
 
 ID2D1Factory* d2d1_factory = nullptr;
 ID2D1HwndRenderTarget* d2d1_rt = nullptr;
 ID2D1SolidColorBrush* d2d1_brush = nullptr;
+IDWriteFactory* dwrite_factory = nullptr;
+IDWriteTextFormat* dwrite_tf = nullptr;
 std::vector<D2D1_ELLIPSE> dots = {};
 const int width = 800;
 const int height = 600;
@@ -11,6 +14,7 @@ int index = 0;
 const float radius = 7.0f;
 float t = 0.5f;
 const float speed = 0.02f;
+bool hide_lines = false;
 
 LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -35,6 +39,23 @@ LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				D2D1::ColorF(D2D1::ColorF::White),
 				&d2d1_brush
 			);
+			hr = DWriteCreateFactory
+			(
+				DWRITE_FACTORY_TYPE_SHARED,
+				__uuidof(IDWriteFactory),
+				(IUnknown**)&dwrite_factory
+			);
+			hr = dwrite_factory->CreateTextFormat
+			(
+				L"Arial",
+				NULL,
+				DWRITE_FONT_WEIGHT_NORMAL,
+				DWRITE_FONT_STYLE_NORMAL,
+				DWRITE_FONT_STRETCH_NORMAL,
+				15.0f,
+				L"en-us",
+				&dwrite_tf
+			);
 		}
 		case WM_LBUTTONDOWN:
 		{
@@ -56,6 +77,12 @@ LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		}
 		case WM_KEYDOWN:
 		{
+			if (wParam == VK_SPACE)
+				if (hide_lines)
+					hide_lines = false;
+				else
+					hide_lines = true;
+
 			if (wParam == VK_ESCAPE)
 			{
 				PostQuitMessage(0);
@@ -124,12 +151,14 @@ LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 									d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
 								else
 									d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::White));
-								d2d1_rt->FillEllipse(pois.at(k), d2d1_brush);
+								if (!hide_lines)
+									d2d1_rt->FillEllipse(pois.at(k), d2d1_brush);
 							}
 							else
 							{
 								d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::White));
-								d2d1_rt->DrawEllipse(pois.at(k), d2d1_brush);
+								if (!hide_lines)
+									d2d1_rt->DrawEllipse(pois.at(k), d2d1_brush);
 							}
 							if(k > 0)
 							{
@@ -140,13 +169,25 @@ LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 								poi.radiusY = radius;
 								temp.push_back(poi);
 								d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::White));
-								d2d1_rt->DrawLine(pois.at(k - 1).point, pois.at(k).point, d2d1_brush);
+								if (!hide_lines)
+									d2d1_rt->DrawLine(pois.at(k - 1).point, pois.at(k).point, d2d1_brush);
 							}
 						}
 					}
 				}
 			}
-
+			//draw text on top
+			d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+			d2d1_rt->DrawText
+			(
+				L"SHIFT + CLICK: ADD POINT\nCLICK + DRAG: MOVE POINT\nA/D: TOGGLE ACTIVE POINT\nLEFT/RIGHT: SLIDE POINT\nBACKSPACE: DELETE POINT\nSPACE: TOGGLE LINES\nESCAPE: EXIT",
+				156,
+				dwrite_tf,
+				D2D1::RectF(0.0f, 0.0f, width, 50.0f),
+				d2d1_brush,
+				D2D1_DRAW_TEXT_OPTIONS_NONE,
+				DWRITE_MEASURING_MODE_NATURAL
+			);
 			d2d1_rt->EndDraw();
 			EndPaint(hWnd, &ps);
 			break;
@@ -232,6 +273,8 @@ int main()
 			t = 1.0f;
 		InvalidateRect(hwnd, NULL, TRUE);
 	}
+	dwrite_tf->Release();
+	dwrite_factory->Release();
 	d2d1_brush->Release();
 	d2d1_rt->Release();
 	d2d1_factory->Release();

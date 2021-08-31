@@ -9,6 +9,7 @@
 #include <bitset>
 
 #include <d2d1.h>
+#include <dwrite.h>
 #include <d3d11.h>
 #include <d3d11sdklayers.h>
 #include <dxgi.h>
