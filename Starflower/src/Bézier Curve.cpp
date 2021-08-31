@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "Demos.h"
-#pragma comment(lib, "d2d1")
-#pragma comment(lib, "dwrite")
 
 ID2D1Factory* d2d1_factory = nullptr;
 ID2D1HwndRenderTarget* d2d1_rt = nullptr;
@@ -16,6 +14,7 @@ const float radius = 7.0f;
 float t = 0.5f;
 const float speed = 0.02f;
 bool hide_lines = false;
+const float dark_grey = 0.1f;
 
 LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -119,7 +118,8 @@ LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			BeginPaint(hWnd, &ps);
 
 			d2d1_rt->BeginDraw();
-			d2d1_rt->Clear(D2D1::ColorF(D2D1::ColorF::Black));
+			//clear background
+			d2d1_rt->Clear(D2D1::ColorF(D2D1::ColorF::ColorF(dark_grey, dark_grey, dark_grey)));
 
 			//draw points/line at every layer
 			std::vector<D2D1_ELLIPSE> temp = dots;
@@ -140,7 +140,7 @@ LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 					{
 						if (pois.size() == 1)
 						{
-							d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::BlueViolet));
+							d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::Blue));
 							d2d1_rt->FillEllipse(pois.at(k), d2d1_brush);
 							continue;
 						}
@@ -206,7 +206,7 @@ LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	return 0;
 }
 
-int RunBézierCurveDemo()
+int BézierCurveDemo()
 {
 	
 	WNDCLASS wc =

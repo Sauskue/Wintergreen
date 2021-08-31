@@ -3,5 +3,5 @@
 
 int main()
 {
-	return RunBézierCurveDemo();
+	return BézierCurveDemo();
 }
