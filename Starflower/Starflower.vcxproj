@@ -264,6 +264,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Perlin Noise.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Demos.h" />

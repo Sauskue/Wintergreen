@@ -1,22 +1,22 @@
 #include "pch.h"
 #include "Demos.h"
 
-ID2D1Factory* d2d1_factory = nullptr;
-ID2D1HwndRenderTarget* d2d1_rt = nullptr;
-ID2D1SolidColorBrush* d2d1_brush = nullptr;
-IDWriteFactory* dwrite_factory = nullptr;
-IDWriteTextFormat* dwrite_tf = nullptr;
-std::vector<D2D1_ELLIPSE> dots = {};
-const int width = 800;
-const int height = 600;
-int index = 0;
-const float radius = 7.0f;
-float t = 0.5f;
-const float speed = 1.0f;
-bool hide_lines = false;
-const float dark_grey = 0.1f;
+static ID2D1Factory* d2d1_factory = nullptr;
+static ID2D1HwndRenderTarget* d2d1_rt = nullptr;
+static ID2D1SolidColorBrush* d2d1_brush = nullptr;
+static IDWriteFactory* dwrite_factory = nullptr;
+static IDWriteTextFormat* dwrite_tf = nullptr;
+static std::vector<D2D1_ELLIPSE> dots = {};
+static const int width = 800;
+static const int height = 600;
+static int index = 0;
+static const float radius = 7.0f;
+static float t = 0.5f;
+static const float speed = 1.0f;
+static bool hide_lines = false;
+static const float dark_grey = 0.1f;
 
-LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK BezierCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -208,11 +208,10 @@ LRESULT CALLBACK WindowCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 int BézierCurveDemo()
 {
-	
 	WNDCLASS wc =
 	{
 		CS_OWNDC | CS_HREDRAW | CS_VREDRAW,
-		WindowCallback,
+		BezierCallback,
 		0,
 		0,
 		GetModuleHandle(NULL),
