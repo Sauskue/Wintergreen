@@ -7,7 +7,7 @@ static ID2D1Factory* d2d1_factory = nullptr;
 static ID2D1HwndRenderTarget* d2d1_rt = nullptr;
 static ID2D1SolidColorBrush* d2d1_brush = nullptr;
 static float noise[height][width] = {0.0f};
-static const float scale = 0.0666f;
+static const float scale = 0.02f;
 
 struct Vec2
 {
@@ -120,6 +120,12 @@ LRESULT CALLBACK PerlinCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			
 			break;
 		}
+		case WM_KEYDOWN:
+		{
+			if (WPARAM(wParam) == VK_ESCAPE)
+				PostQuitMessage(0);
+			break;
+		}
 		case WM_CLOSE:
 		{
 			PostQuitMessage(0);
@@ -164,7 +170,7 @@ int PerlinNoiseDemo()
 		NULL,
 		NULL,
 		NULL,
-		L"Window class"
+		L"Window class 2"
 	};
 	RegisterClass(&wc);
 	RECT rc;
@@ -194,7 +200,15 @@ int PerlinNoiseDemo()
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) != 0)
 		{
 			if (msg.message == WM_QUIT)
+			{
+				constant_vectors.clear();
+				d2d1_brush->Release();
+				d2d1_rt->Release();
+				d2d1_factory->Release();
+				DestroyWindow(hwnd);
+				UnregisterClass(wc.lpszClassName, NULL);
 				return (int)msg.wParam;
+			}
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}

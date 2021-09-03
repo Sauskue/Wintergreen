@@ -3,26 +3,27 @@
 
 int main()
 {
-	std::cout << "1)Bezeir Curves" << std::endl;
-	std::cout << "2)Perlin Noise" << std::endl;
-	std::cout << "3)Test Code" << std::endl;
-
-	std::cout << std::endl;
-	std::cout << "Select Demo: ";
-	int i;
-	std::cin >> i;
-	switch (i)
+	while(true)
 	{
-		case 1:
-			return BézierCurveDemo();
-		case 2:
-			return PerlinNoiseDemo();
-		case 3:
+		std::cout << "1)Bezeir Curves" << std::endl;
+		std::cout << "2)Perlin Noise" << std::endl;
+		std::cout << "3)Test Code" << std::endl;
+
+		std::cout << std::endl;
+		std::cout << "Select Demo: ";
+		int i;
+		int exit_code = 0;
+		std::cin >> i;
+		switch (i)
 		{
-			
-			return 0;
+			case 1:
+				exit_code = BézierCurveDemo();
+				break;
+			case 2:
+				exit_code = PerlinNoiseDemo();
+				break;
+			default:
+				return exit_code;
 		}
-		default:
-			return 0;
 	}
 }

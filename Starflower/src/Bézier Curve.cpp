@@ -219,7 +219,7 @@ int BézierCurveDemo()
 		NULL,
 		NULL,
 		NULL,
-		L"Window class"
+		L"Window class 1"
 	};
 	RegisterClass(&wc);
 	RECT rc;
@@ -256,7 +256,17 @@ int BézierCurveDemo()
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) != 0)
 		{
 			if (msg.message == WM_QUIT)
+			{
+				dots.clear();
+				dwrite_tf->Release();
+				dwrite_factory->Release();
+				d2d1_brush->Release();
+				d2d1_rt->Release();
+				d2d1_factory->Release();
+				DestroyWindow(hwnd);
+				UnregisterClass(wc.lpszClassName, NULL);
 				return (int)msg.wParam;
+			}
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
