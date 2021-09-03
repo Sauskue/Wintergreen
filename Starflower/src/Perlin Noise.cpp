@@ -7,7 +7,7 @@ static ID2D1Factory* d2d1_factory = nullptr;
 static ID2D1HwndRenderTarget* d2d1_rt = nullptr;
 static ID2D1SolidColorBrush* d2d1_brush = nullptr;
 static float noise[height][width] = {0.0f};
-static const float frequency = 0.009f;
+static const float scale = 0.0666f;
 
 struct Vec2
 {
@@ -21,8 +21,8 @@ struct Vec2
 		return ((x * other.x) + (y * other.y));
 	}
 };
-static std::vector<Vec2> constant_vectors;
 
+static std::vector<Vec2> constant_vectors;
 
 float val(float x, float y)
 {
@@ -70,7 +70,6 @@ float val(float x, float y)
 	return lerp_t;
 }
 
-
 LRESULT CALLBACK PerlinCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
@@ -97,8 +96,6 @@ LRESULT CALLBACK PerlinCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				);
 			}
 
-
-
 			Vec2 gradients[4] =
 			{
 				{1.0f, 0.0f},
@@ -107,7 +104,7 @@ LRESULT CALLBACK PerlinCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				{0.0f, 1.0f}
 			};
 
-
+			std::srand(std::time(0));
 			for (int i = 0; i < 256 * 256 * 2; i++)
 			{
 				constant_vectors.push_back(gradients[std::rand() % 4]);
@@ -117,7 +114,7 @@ LRESULT CALLBACK PerlinCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			{
 				for (int x = 0; x < width; x++)
 				{
-					noise[y][x] = val(x * frequency, y * frequency);
+					noise[y][x] = val(x * scale, y * scale);
 				}
 			}
 			
