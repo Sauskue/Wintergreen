@@ -6,7 +6,11 @@ static const int height = 600;
 static ID2D1Factory* d2d1_factory = nullptr;
 static ID2D1HwndRenderTarget* d2d1_rt = nullptr;
 static ID2D1SolidColorBrush* d2d1_brush = nullptr;
-static float noise[height][width] = {0.0f};
+static unsigned char noise[height][width] = { 0 };
+static unsigned char* bits = nullptr;
+static HDC mem_dc = NULL;
+static HDC win_dc = NULL;
+static HBITMAP bmp = NULL;
 static const float scale = 0.02f;
 
 struct Vec2
@@ -104,20 +108,70 @@ LRESULT CALLBACK PerlinCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				{0.0f, 1.0f}
 			};
 
-			std::srand(std::time(0));
+			std::srand((unsigned int)std::time(0));
 			for (int i = 0; i < 256 * 256 * 2; i++)
 			{
 				constant_vectors.push_back(gradients[std::rand() % 4]);
 			}
+			win_dc = GetDC(hWnd);
 
+			mem_dc = CreateCompatibleDC(win_dc);
+
+			RECT rc;
+			GetClientRect(hWnd, &rc);
+
+			BITMAPINFO bmi;
+			ZeroMemory(&bmi, sizeof(BITMAPINFO));
+			bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+			bmi.bmiHeader.biWidth = rc.right - rc.left;
+			bmi.bmiHeader.biHeight = rc.top - rc.bottom;
+			bmi.bmiHeader.biPlanes = 1;
+			bmi.bmiHeader.biBitCount = 32;
+			
+			bmp = CreateDIBSection(mem_dc, &bmi, DIB_RGB_COLORS, (void**)&bits, NULL, NULL);
+			HGDIOBJ old = SelectObject(mem_dc, bmp);
+
+			BitBlt
+			(
+				win_dc,
+				0,
+				0,
+				rc.right - rc.left,
+				rc.bottom - rc.top,
+				mem_dc,
+				0,
+				0,
+				SRCCOPY
+			);
 			for (int y = 0; y < height; y++)
 			{
 				for (int x = 0; x < width; x++)
 				{
-					noise[y][x] = val(x * scale, y * scale);
+					float intensity = val(x * scale, y * scale);			//[-1, 1]
+					intensity += 1.0f;										//[0, 2]
+					intensity /= 2.0f;										//[0, 1]
+					intensity *= 255;										//[0, 255]
+					noise[y][x] = (unsigned char)intensity;
+					bits[(y * 4 * width) + (4 * x) + 0] = noise[y][x];		//blue
+					bits[(y * 4 * width) + (4 * x) + 1] = noise[y][x];		//green
+					bits[(y * 4 * width) + (4 * x) + 2] = noise[y][x];		//red
+					bits[(y * 4 * width) + (4 * x) + 3] = (unsigned char)0;	//reserved(set to 0)
 				}
 			}
-			
+			BitBlt
+			(
+				win_dc,
+				0,
+				0,
+				rc.right - rc.left,
+				rc.bottom - rc.top,
+				mem_dc,
+				0,
+				0,
+				SRCCOPY
+			);
+			SelectObject(win_dc, old);
+
 			break;
 		}
 		case WM_KEYDOWN:
@@ -134,18 +188,21 @@ LRESULT CALLBACK PerlinCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		case WM_PAINT:
 		{
 			PAINTSTRUCT ps;
-			HDC win_dc = BeginPaint(hWnd, &ps);
-			for (int y = 0; y < height; y++)
-			{
-				for (int x = 0; x < width; x++)
-				{
-					float intensity = noise[y][x];
-					intensity += 1.0f;
-					intensity /= 2.0f;
-					intensity *= 255;
-					SetPixel(win_dc, x, y, RGB((int)intensity, (int)intensity, (int)intensity));
-				}
-			}
+			BeginPaint(hWnd, &ps);
+			HGDIOBJ old = SelectObject(mem_dc, bmp);
+			BitBlt
+			(
+				win_dc,
+				0,
+				0,
+				width,
+				height,
+				mem_dc,
+				0,
+				0,
+				SRCCOPY
+			);
+			SelectObject(win_dc, old);
 			EndPaint(hWnd, &ps);
 			break;
 		}
@@ -212,5 +269,6 @@ int PerlinNoiseDemo()
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
+		InvalidateRect(hwnd, &rc, TRUE);
 	}
 }

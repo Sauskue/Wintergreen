@@ -7,7 +7,7 @@ int main()
 	{
 		std::cout << "1)Bezeir Curves" << std::endl;
 		std::cout << "2)Perlin Noise" << std::endl;
-		std::cout << "3)Test Code" << std::endl;
+		std::cout << "3)Exit" << std::endl;
 
 		std::cout << std::endl;
 		std::cout << "Select Demo: ";
