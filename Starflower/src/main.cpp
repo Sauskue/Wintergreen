@@ -5,9 +5,9 @@ int main()
 {
 	while(true)
 	{
-		std::cout << "1)Bezeir Curves" << std::endl;
+		std::cout << "1)Bezier Curves" << std::endl;
 		std::cout << "2)Perlin Noise" << std::endl;
-		std::cout << "3)Game of Life" << std::endl;
+		std::cout << "3)Conway's Game of Life" << std::endl;
 		std::cout << "4)Exit" << std::endl;
 
 		std::cout << std::endl;
