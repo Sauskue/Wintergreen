@@ -19,6 +19,9 @@
     <ClCompile Include="src\Perlin Noise.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameOfLife.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\pch.h">

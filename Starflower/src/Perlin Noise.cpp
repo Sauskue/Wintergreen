@@ -227,7 +227,7 @@ int PerlinNoiseDemo()
 		NULL,
 		NULL,
 		NULL,
-		L"Window class 2"
+		L"PerlinNoise Window Class"
 	};
 	RegisterClass(&wc);
 	RECT rc;

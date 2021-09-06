@@ -219,7 +219,7 @@ int BézierCurveDemo()
 		NULL,
 		NULL,
 		NULL,
-		L"Window class 1"
+		L"BezierCurve Window Class"
 	};
 	RegisterClass(&wc);
 	RECT rc;

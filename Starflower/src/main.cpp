@@ -7,7 +7,8 @@ int main()
 	{
 		std::cout << "1)Bezeir Curves" << std::endl;
 		std::cout << "2)Perlin Noise" << std::endl;
-		std::cout << "3)Exit" << std::endl;
+		std::cout << "3)Game of Life" << std::endl;
+		std::cout << "4)Exit" << std::endl;
 
 		std::cout << std::endl;
 		std::cout << "Select Demo: ";
@@ -21,6 +22,9 @@ int main()
 				break;
 			case 2:
 				exit_code = PerlinNoiseDemo();
+				break;
+			case 3:
+				exit_code = GameOfLife();
 				break;
 			default:
 				return exit_code;
