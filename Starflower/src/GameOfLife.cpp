@@ -3,6 +3,14 @@
 
 static const int width = 800;
 static const int height = 600;
+static HDC win_dc = NULL;
+static HDC mem_dc = NULL;
+static HBITMAP bmp = NULL;
+
+static bool cells[height][width] = { 0 };
+static bool cells_next[height][width] = { 0 };
+static const int scale = 1;
+static unsigned char* bits = nullptr;
 
 /*KEY PRINCIPLES
 1)DEATH-STATE CHANGED FROM 1 TO 0(0, 1, 4, 5, 6, 7, 8, 9)
@@ -13,10 +21,6 @@ static const int height = 600;
 3)STASIS
 	3.1)IN ALL OTHER CASES STATE REMAINS SAME
 */
-
-bool cells[height][width] = { 0 };
-bool cells_next[height][width] = { 0 };
-const int scale = 1;
 
 void Update()
 {
@@ -63,6 +67,10 @@ void Update()
 		for (int col = 0; col < width; col++)
 		{
 			cells[row][col] = cells_next[row][col];
+			bits[(row * 4 * width) + (4 * col) + 0] = cells[row][col] * 255; //blue
+			bits[(row * 4 * width) + (4 * col) + 1] = cells[row][col] * 255; //green
+			bits[(row * 4 * width) + (4 * col) + 2] = cells[row][col] * 255; //red
+			bits[(row * 4 * width) + (4 * col) + 3] = (unsigned char)0;		 //reserved(set to 0)
 		}
 	}
 }
@@ -73,6 +81,37 @@ LRESULT CALLBACK GameOfLifeCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 	{
 		case WM_CREATE:
 		{
+			win_dc = GetDC(hWnd);
+			mem_dc = CreateCompatibleDC(win_dc);
+
+			RECT rc;
+			GetClientRect(hWnd, &rc);
+
+			BITMAPINFO bmi;
+			ZeroMemory(&bmi, sizeof(BITMAPINFO));
+			bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+			bmi.bmiHeader.biWidth = rc.right - rc.left;
+			bmi.bmiHeader.biHeight = rc.top - rc.bottom;
+			bmi.bmiHeader.biPlanes = 1;
+			bmi.bmiHeader.biBitCount = 32;
+
+			bmp = CreateDIBSection(mem_dc, &bmi, DIB_RGB_COLORS, (void**)&bits, NULL, NULL);
+			HGDIOBJ old = SelectObject(mem_dc, bmp);
+
+			BitBlt
+			(
+				win_dc,
+				0,
+				0,
+				rc.right - rc.left,
+				rc.bottom - rc.top,
+				mem_dc,
+				0,
+				0,
+				SRCCOPY
+			);
+			SelectObject(win_dc, old);
+
 			std::srand((unsigned int)std::time(0));
 			for (int row = 0; row < height; row++)
 			{
@@ -80,8 +119,26 @@ LRESULT CALLBACK GameOfLifeCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 				{
 					cells[row][col] = std::rand() % 2;
 					cells_next[row][col] = cells[row][col];
+					bits[(row * 4 * width) + (4 * col) + 0] = cells[row][col] * 255; //blue
+					bits[(row * 4 * width) + (4 * col) + 1] = cells[row][col] * 255; //green
+					bits[(row * 4 * width) + (4 * col) + 2] = cells[row][col] * 255; //red
+					bits[(row * 4 * width) + (4 * col) + 3] = (unsigned char)0;		 //reserved(set to 0)
 				}
 			}
+
+			BitBlt
+			(
+				win_dc,
+				0,
+				0,
+				rc.right - rc.left,
+				rc.bottom - rc.top,
+				mem_dc,
+				0,
+				0,
+				SRCCOPY
+			);
+			SelectObject(win_dc, old);
 			break;
 		}
 		case WM_PAINT:
@@ -89,16 +146,22 @@ LRESULT CALLBACK GameOfLifeCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 			Update();
 			PAINTSTRUCT ps;
 			BeginPaint(hWnd, &ps);
-			HDC win_dc = GetDC(hWnd);
-			for(int row = 0; row < height; row++)
-				for (int col = 0; col < width; col++)
-				{
-					if (cells[row][col])
-						SetPixel(win_dc, col, row, RGB(0, 0, 0));//paint that pixel black(cell is alive)
-					else
-						SetPixel(win_dc, col, row, RGB(255, 255, 255));//paint pixel white(nothing there)
-				}
+			HGDIOBJ old = SelectObject(mem_dc, bmp);
+			BitBlt
+			(
+				win_dc,
+				0,
+				0,
+				width,
+				height,
+				mem_dc,
+				0,
+				0,
+				SRCCOPY
+			);
+			SelectObject(win_dc, old);
 			EndPaint(hWnd, &ps);
+
 			break;
 		}
 
@@ -110,8 +173,6 @@ LRESULT CALLBACK GameOfLifeCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 	}
 	return 0;
 }
-
-
 
 int GameOfLife()
 {
