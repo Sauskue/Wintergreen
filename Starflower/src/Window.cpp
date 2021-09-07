@@ -3,6 +3,7 @@
 
 WNDCLASS Window::wc = {};
 bool Window::registered = false;
+std::vector<Window*> Window::windows = std::vector<Window*>();
 
 Window::Window():
 	x(CW_USEDEFAULT),
@@ -10,7 +11,8 @@ Window::Window():
 	width(0),
 	height(0),
 	title(L"Window"),
-	window_handle(NULL)
+	window_handle(NULL),
+	alive(false)
 {
 	if (!registered)
 	{
@@ -54,13 +56,17 @@ Window::Window():
 		GetModuleHandle(NULL),
 		(void*)this
 	);
+	if (window_handle)
+		alive = true;
 }
 
-Window::~Window(){}
-
-void Window::Init()
+Window::~Window()
 {
-	//start a thread here
+	alive = false;
+}
+
+void Window::ProcessMessages()
+{
 	while (true)
 	{
 		MSG msg;
@@ -69,8 +75,19 @@ void Window::Init()
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		OnUpdate();
-		OnDraw();
+		for (int i = 0; i < (int)windows.size(); i++)
+		{
+			if (windows[i]->alive)
+			{
+				windows[i]->OnUpdate();
+				windows[i]->OnDraw();
+			}
+			else
+			{
+				windows.erase(windows.begin() + i);
+				i--;
+			}
+		}
 	}
 }
 
@@ -81,12 +98,14 @@ LRESULT CALLBACK Window::WindowCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 		case WM_CREATE:
 		{
 			OnCreate();
+			windows.push_back(this);
 			break;
 		}
 		case WM_CLOSE:
 		{
 			OnDestroy();
 			DestroyWindow(hwnd);
+			alive = false;
 			break;
 		}
 	}
