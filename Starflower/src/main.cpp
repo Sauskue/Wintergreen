@@ -1,9 +1,32 @@
 #include "pch.h"
 #include "Demos.h"
+#include "Window.h"
+
+class MainWindow : public Window
+{
+public:
+	MainWindow()
+	{
+		std::cout << "main window constructor\n";
+	}
+private:
+	void OnUpdate() override
+	{}
+
+	void OnDraw() override
+	{}
+
+	void OnDestroy() override
+	{
+		std::cout << "MainWindow destroyed\n";
+	}
+};
 
 int main()
 {
-	while(true)
+	MainWindow window;
+	Window::ProcessMessages();
+	/*while (true)
 	{
 		std::cout << "1)Bezier Curves" << std::endl;
 		std::cout << "2)Perlin Noise" << std::endl;
@@ -30,4 +53,5 @@ int main()
 				return exit_code;
 		}
 	}
+	*/
 }

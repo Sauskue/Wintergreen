@@ -16,9 +16,9 @@ static const float speed = 1.0f;
 static bool hide_lines = false;
 static const float dark_grey = 0.1f;
 
-LRESULT CALLBACK BezierCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK BezierCallback(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	switch (uMsg)
+	switch (Msg)
 	{
 		case WM_CREATE:
 		{
@@ -31,7 +31,7 @@ LRESULT CALLBACK BezierCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			hr = d2d1_factory->CreateHwndRenderTarget
 			(
 				D2D1::RenderTargetProperties(),
-				D2D1::HwndRenderTargetProperties(hwnd, D2D1::SizeU(width, height)),
+				D2D1::HwndRenderTargetProperties(hWnd, D2D1::SizeU(width, height)),
 				&d2d1_rt
 			);
 			hr = d2d1_rt->CreateSolidColorBrush
@@ -72,7 +72,7 @@ LRESULT CALLBACK BezierCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				dots.push_back(dot);
 				index = (int)dots.size() - 1;
 			}
-			InvalidateRect(hwnd, NULL, TRUE);
+			InvalidateRect(hWnd, NULL, TRUE);
 			break;
 		}
 		case WM_KEYDOWN:
@@ -109,13 +109,13 @@ LRESULT CALLBACK BezierCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				index = (int)dots.size() - 1;
 			else if (index > (int)dots.size() - 1)
 				index = 0;
-			InvalidateRect(hwnd, NULL, TRUE);
+			InvalidateRect(hWnd, NULL, TRUE);
 			break;
 		}
 		case WM_PAINT:
 		{
 			PAINTSTRUCT ps;
-			BeginPaint(hwnd, &ps);
+			BeginPaint(hWnd, &ps);
 
 			d2d1_rt->BeginDraw();
 			//clear background
@@ -190,7 +190,7 @@ LRESULT CALLBACK BezierCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				DWRITE_MEASURING_MODE_NATURAL
 			);
 			d2d1_rt->EndDraw();
-			EndPaint(hwnd, &ps);
+			EndPaint(hWnd, &ps);
 			break;
 		}
 		case WM_CLOSE:
@@ -200,7 +200,7 @@ LRESULT CALLBACK BezierCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		}
 		default:
 		{
-			return DefWindowProc(hwnd, uMsg, wParam, lParam);
+			return DefWindowProc(hWnd, Msg, wParam, lParam);
 		}
 	}
 	return 0;
@@ -228,7 +228,7 @@ int BézierCurveDemo()
 	rc.right = width;
 	rc.bottom = height;
 	AdjustWindowRect(&rc, (WS_OVERLAPPEDWINDOW | WS_VISIBLE) & (~WS_THICKFRAME), FALSE);
-	HWND hwnd = CreateWindow
+	HWND hWnd = CreateWindow
 	(
 		wc.lpszClassName,
 		L"Bezier Curve Demo",
@@ -263,7 +263,7 @@ int BézierCurveDemo()
 				d2d1_brush->Release();
 				d2d1_rt->Release();
 				d2d1_factory->Release();
-				DestroyWindow(hwnd);
+				DestroyWindow(hWnd);
 				UnregisterClass(wc.lpszClassName, NULL);
 				return (int)msg.wParam;
 			}
@@ -276,7 +276,7 @@ int BézierCurveDemo()
 			{
 				POINT p;
 				GetCursorPos(&p);
-				ScreenToClient(hwnd, &p);
+				ScreenToClient(hWnd, &p);
 				dots.at(index).point = D2D1::Point2F((float)p.x, (float)p.y);
 			}
 		}
@@ -288,7 +288,7 @@ int BézierCurveDemo()
 			t = 0.0f;
 		if (t >= 1.0f)
 			t = 1.0f;
-		InvalidateRect(hwnd, NULL, TRUE);
+		InvalidateRect(hWnd, NULL, TRUE);
 	}
 	dwrite_tf->Release();
 	dwrite_factory->Release();

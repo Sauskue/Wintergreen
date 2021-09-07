@@ -74,9 +74,9 @@ float val(float x, float y)
 	return lerp_t;
 }
 
-LRESULT CALLBACK PerlinCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK PerlinCallback(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	switch (uMsg)
+	switch (Msg)
 	{
 		case WM_CREATE:
 		{
@@ -90,7 +90,7 @@ LRESULT CALLBACK PerlinCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				hr = d2d1_factory->CreateHwndRenderTarget
 				(
 					D2D1::RenderTargetProperties(),
-					D2D1::HwndRenderTargetProperties(hwnd, D2D1::SizeU(width, height)),
+					D2D1::HwndRenderTargetProperties(hWnd, D2D1::SizeU(width, height)),
 					&d2d1_rt
 				);
 				hr = d2d1_rt->CreateSolidColorBrush
@@ -113,12 +113,12 @@ LRESULT CALLBACK PerlinCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			{
 				constant_vectors.push_back(gradients[std::rand() % 4]);
 			}
-			win_dc = GetDC(hwnd);
+			win_dc = GetDC(hWnd);
 
 			mem_dc = CreateCompatibleDC(win_dc);
 
 			RECT rc;
-			GetClientRect(hwnd, &rc);
+			GetClientRect(hWnd, &rc);
 
 			BITMAPINFO bmi;
 			ZeroMemory(&bmi, sizeof(BITMAPINFO));
@@ -188,7 +188,7 @@ LRESULT CALLBACK PerlinCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		case WM_PAINT:
 		{
 			PAINTSTRUCT ps;
-			BeginPaint(hwnd, &ps);
+			BeginPaint(hWnd, &ps);
 			HGDIOBJ old = SelectObject(mem_dc, bmp);
 			BitBlt
 			(
@@ -203,12 +203,12 @@ LRESULT CALLBACK PerlinCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				SRCCOPY
 			);
 			SelectObject(win_dc, old);
-			EndPaint(hwnd, &ps);
+			EndPaint(hWnd, &ps);
 			break;
 		}
 		default:
 		{
-			return DefWindowProc(hwnd, uMsg, wParam, lParam);
+			return DefWindowProc(hWnd, Msg, wParam, lParam);
 		}
 	}
 	return 0;
@@ -236,7 +236,7 @@ int PerlinNoiseDemo()
 	rc.right = width;
 	rc.bottom = height;
 	AdjustWindowRect(&rc, (WS_OVERLAPPEDWINDOW | WS_VISIBLE) & (~WS_THICKFRAME), FALSE);
-	HWND hwnd = CreateWindow
+	HWND hWnd = CreateWindow
 	(
 		wc.lpszClassName,
 		L"Perlin Noise Demo",
@@ -262,13 +262,13 @@ int PerlinNoiseDemo()
 				d2d1_brush->Release();
 				d2d1_rt->Release();
 				d2d1_factory->Release();
-				DestroyWindow(hwnd);
+				DestroyWindow(hWnd);
 				UnregisterClass(wc.lpszClassName, NULL);
 				return (int)msg.wParam;
 			}
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		InvalidateRect(hwnd, &rc, TRUE);
+		InvalidateRect(hWnd, &rc, TRUE);
 	}
 }
