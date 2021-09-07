@@ -16,7 +16,7 @@ static const float speed = 1.0f;
 static bool hide_lines = false;
 static const float dark_grey = 0.1f;
 
-LRESULT CALLBACK BezierCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK BezierCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -31,7 +31,7 @@ LRESULT CALLBACK BezierCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			hr = d2d1_factory->CreateHwndRenderTarget
 			(
 				D2D1::RenderTargetProperties(),
-				D2D1::HwndRenderTargetProperties(hWnd, D2D1::SizeU(width, height)),
+				D2D1::HwndRenderTargetProperties(hwnd, D2D1::SizeU(width, height)),
 				&d2d1_rt
 			);
 			hr = d2d1_rt->CreateSolidColorBrush
@@ -72,7 +72,7 @@ LRESULT CALLBACK BezierCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				dots.push_back(dot);
 				index = (int)dots.size() - 1;
 			}
-			InvalidateRect(hWnd, NULL, TRUE);
+			InvalidateRect(hwnd, NULL, TRUE);
 			break;
 		}
 		case WM_KEYDOWN:
@@ -109,13 +109,13 @@ LRESULT CALLBACK BezierCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				index = (int)dots.size() - 1;
 			else if (index > (int)dots.size() - 1)
 				index = 0;
-			InvalidateRect(hWnd, NULL, TRUE);
+			InvalidateRect(hwnd, NULL, TRUE);
 			break;
 		}
 		case WM_PAINT:
 		{
 			PAINTSTRUCT ps;
-			BeginPaint(hWnd, &ps);
+			BeginPaint(hwnd, &ps);
 
 			d2d1_rt->BeginDraw();
 			//clear background
@@ -190,7 +190,7 @@ LRESULT CALLBACK BezierCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				DWRITE_MEASURING_MODE_NATURAL
 			);
 			d2d1_rt->EndDraw();
-			EndPaint(hWnd, &ps);
+			EndPaint(hwnd, &ps);
 			break;
 		}
 		case WM_CLOSE:
@@ -200,7 +200,7 @@ LRESULT CALLBACK BezierCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		}
 		default:
 		{
-			return DefWindowProc(hWnd, uMsg, wParam, lParam);
+			return DefWindowProc(hwnd, uMsg, wParam, lParam);
 		}
 	}
 	return 0;

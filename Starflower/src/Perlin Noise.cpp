@@ -74,7 +74,7 @@ float val(float x, float y)
 	return lerp_t;
 }
 
-LRESULT CALLBACK PerlinCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK PerlinCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -90,7 +90,7 @@ LRESULT CALLBACK PerlinCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				hr = d2d1_factory->CreateHwndRenderTarget
 				(
 					D2D1::RenderTargetProperties(),
-					D2D1::HwndRenderTargetProperties(hWnd, D2D1::SizeU(width, height)),
+					D2D1::HwndRenderTargetProperties(hwnd, D2D1::SizeU(width, height)),
 					&d2d1_rt
 				);
 				hr = d2d1_rt->CreateSolidColorBrush
@@ -113,12 +113,12 @@ LRESULT CALLBACK PerlinCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			{
 				constant_vectors.push_back(gradients[std::rand() % 4]);
 			}
-			win_dc = GetDC(hWnd);
+			win_dc = GetDC(hwnd);
 
 			mem_dc = CreateCompatibleDC(win_dc);
 
 			RECT rc;
-			GetClientRect(hWnd, &rc);
+			GetClientRect(hwnd, &rc);
 
 			BITMAPINFO bmi;
 			ZeroMemory(&bmi, sizeof(BITMAPINFO));
@@ -188,7 +188,7 @@ LRESULT CALLBACK PerlinCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		case WM_PAINT:
 		{
 			PAINTSTRUCT ps;
-			BeginPaint(hWnd, &ps);
+			BeginPaint(hwnd, &ps);
 			HGDIOBJ old = SelectObject(mem_dc, bmp);
 			BitBlt
 			(
@@ -203,12 +203,12 @@ LRESULT CALLBACK PerlinCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				SRCCOPY
 			);
 			SelectObject(win_dc, old);
-			EndPaint(hWnd, &ps);
+			EndPaint(hwnd, &ps);
 			break;
 		}
 		default:
 		{
-			return DefWindowProc(hWnd, uMsg, wParam, lParam);
+			return DefWindowProc(hwnd, uMsg, wParam, lParam);
 		}
 	}
 	return 0;

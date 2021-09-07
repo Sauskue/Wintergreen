@@ -75,17 +75,17 @@ void Update()
 	}
 }
 
-LRESULT CALLBACK GameOfLifeCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK GameOfLifeCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
 		case WM_CREATE:
 		{
-			win_dc = GetDC(hWnd);
+			win_dc = GetDC(hwnd);
 			mem_dc = CreateCompatibleDC(win_dc);
 
 			RECT rc;
-			GetClientRect(hWnd, &rc);
+			GetClientRect(hwnd, &rc);
 
 			BITMAPINFO bmi;
 			ZeroMemory(&bmi, sizeof(BITMAPINFO));
@@ -145,7 +145,7 @@ LRESULT CALLBACK GameOfLifeCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 		{
 			Update();
 			PAINTSTRUCT ps;
-			BeginPaint(hWnd, &ps);
+			BeginPaint(hwnd, &ps);
 			HGDIOBJ old = SelectObject(mem_dc, bmp);
 			BitBlt
 			(
@@ -160,7 +160,7 @@ LRESULT CALLBACK GameOfLifeCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 				SRCCOPY
 			);
 			SelectObject(win_dc, old);
-			EndPaint(hWnd, &ps);
+			EndPaint(hwnd, &ps);
 
 			break;
 		}
@@ -169,7 +169,7 @@ LRESULT CALLBACK GameOfLifeCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 			PostQuitMessage(0);
 			break;
 	default:
-		return DefWindowProc(hWnd, uMsg, wParam, lParam);
+		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
 	return 0;
 }
@@ -196,7 +196,7 @@ int GameOfLife()
 	rc.right = width;
 	rc.bottom = height;
 	AdjustWindowRect(&rc, (WS_OVERLAPPEDWINDOW | WS_VISIBLE) & (~WS_THICKFRAME), FALSE);
-	HWND hWnd = CreateWindow
+	HWND hwnd = CreateWindow
 	(
 		wc.lpszClassName,
 		L"Game of Life Demo",
@@ -218,7 +218,7 @@ int GameOfLife()
 		{
 			if (msg.message == WM_QUIT)
 			{
-				DestroyWindow(hWnd);
+				DestroyWindow(hwnd);
 				UnregisterClass(wc.lpszClassName, NULL);
 				return (int)msg.wParam;
 			}
@@ -226,6 +226,6 @@ int GameOfLife()
 			DispatchMessage(&msg);
 		}
 
-		InvalidateRect(hWnd, &rc, TRUE);
+		InvalidateRect(hwnd, &rc, TRUE);
 	}
 }
