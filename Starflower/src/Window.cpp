@@ -1,25 +1,30 @@
 #include "pch.h"
-#include "Window.h"
+#include "Application.h"
 
-WNDCLASS Window::wc = {};
-bool Window::registered = false;
-std::vector<Window*> Window::windows = std::vector<Window*>();
+WNDCLASS Application::Window::wc = { 0 };
+bool Application::Window::registered = false;
+std::vector<Application::Window*> Application::Window::windows = std::vector<Application::Window*>();
 
-Window::Window():
-	x(0),
-	y(0),
-	width(0),
-	height(0),
-	title(L"Window"),
-	window_handle(NULL),
-	alive(false)
+Application::Window::Window():
+	Window(-1, -1, 0, 0)
+{}
+
+Application::Window::Window(int x, int y):
+	Window(x, y, 0, 0)
+{}
+
+Application::Window::Window(int x, int y, int width, int height):
+	x(x),
+	y(y),
+	width(width),
+	height(height)
 {
 	if (!registered)
 	{
 		wc =
 		{
 			CS_OWNDC | CS_HREDRAW | CS_VREDRAW,
-			StaticWindowCallback,
+			StaticWindowProc,
 			0,
 			0,
 			GetModuleHandle(NULL),
@@ -32,7 +37,7 @@ Window::Window():
 		RegisterClass(&wc);
 		registered = true;
 	}
-	
+
 	if (!width == 0 && !height == 0)
 	{
 		RECT rc;
@@ -42,6 +47,7 @@ Window::Window():
 		rc.bottom = height;
 		AdjustWindowRect(&rc, (WS_OVERLAPPEDWINDOW | WS_VISIBLE) & (~WS_THICKFRAME), FALSE);
 	}
+
 	window_handle = CreateWindow
 	(
 		wc.lpszClassName,
@@ -56,68 +62,47 @@ Window::Window():
 		GetModuleHandle(NULL),
 		(void*)this
 	);
+
 	if (window_handle)
+	{
+		windows.push_back(this);
 		alive = true;
+	}
 }
 
-Window::~Window()
+Application::Window::~Window()
 {
+	windows.erase(windows.begin() + index);
+	DestroyWindow(window_handle);
 	alive = false;
 }
 
-void Window::ProcessMessages()
+bool Application::Window::Update()
 {
-	while (true)
+	MSG msg;
+	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) != 0)
 	{
-		if ((int)windows.size() < 1)
-			return;
-		MSG msg;
-		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) != 0)
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	for (unsigned int i = 0; i < windows.size(); i++)
+	{
+		windows[i]->index = i;
+		if (!windows[i]->alive)
 		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		for (int i = 0; i < (int)windows.size(); i++)
-		{
-			if (windows[i]->alive)
-			{
-				windows[i]->OnUpdate();
-				windows[i]->OnDraw();
-			}
-			else
-			{
-				windows.erase(windows.begin() + i);
-				i--;
-			}
+			windows[i]->~Window();
+			i--;
 		}
 	}
+
+	if (windows.size() == 0)
+		return false;
+	else
+		return true;
 }
 
-LRESULT CALLBACK Window::WindowCallback(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
-{
-	switch (Msg)
-	{
-		case WM_NCCREATE:
-		{
-			windows.push_back(this);
-			return TRUE;
-		}
-		case WM_PAINT:
-		{
-			return 0;
-		}
-		case WM_CLOSE:
-		{
-			OnDestroy();
-			DestroyWindow(hWnd);
-			alive = false;
-			return 0;
-		}
-	}
-	return DefWindowProc(hWnd, Msg, wParam, lParam);
-}
-
-LRESULT CALLBACK Window::StaticWindowCallback(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK Application::Window::StaticWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	static bool initialized = false;
 	switch (Msg)
@@ -130,7 +115,33 @@ LRESULT CALLBACK Window::StaticWindowCallback(HWND hWnd, UINT Msg, WPARAM wParam
 		}
 	}
 	if (initialized)
-		return ((Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA))->WindowCallback(hWnd, Msg, wParam, lParam);
+		return ((Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA))->WindowProc(hWnd, Msg, wParam, lParam);
 	else
 		return DefWindowProc(hWnd, Msg, wParam, lParam);
+}
+
+LRESULT CALLBACK Application::Window::WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	switch (Msg)
+	{
+		case WM_CLOSE:
+		{
+			this->~Window();
+			return 0;
+		}
+	}
+
+	return DefWindowProc(hWnd, Msg, wParam, lParam);
+}
+
+void Application::Window::SetPos(int x, int y)
+{
+	this->x = x;
+	this->y = y;
+}
+
+void Application::Window::SetSize(int width, int height)
+{
+	this->width = width;
+	this->height = height;
 }

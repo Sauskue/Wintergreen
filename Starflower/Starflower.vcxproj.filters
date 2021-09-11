@@ -25,6 +25,9 @@
     <ClCompile Include="src\Window.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Application.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\pch.h">
@@ -33,7 +36,7 @@
     <ClInclude Include="src\Demos.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Window.h">
+    <ClInclude Include="src\Application.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

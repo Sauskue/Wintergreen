@@ -1,5 +1,5 @@
-#include "Demos.h"
 #include "pch.h"
+#include "Demos.h"
 
 static const int width = 800;
 static const int height = 600;
