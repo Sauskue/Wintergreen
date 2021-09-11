@@ -9,18 +9,21 @@ Application::Application()
 
 Application::~Application()
 {
+	OnDestroy();
 	running = false;
 }
 
 void Application::Run()
 {
-	while (running)
+	OnCreate();
+	while (true)
 	{
 		if (Update())
 			Render();
 		else
-			this->~Application();
+			break;
 	}
+	this->~Application();
 }
 
 void Application::Kill()
