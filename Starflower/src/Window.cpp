@@ -91,7 +91,7 @@ bool Application::Window::Update()
 		windows[i]->index = i;
 		if (!windows[i]->alive)
 		{
-			windows[i]->~Window();
+			delete windows[i];
 			i--;
 		}
 	}
@@ -126,7 +126,7 @@ LRESULT CALLBACK Application::Window::WindowProc(HWND hWnd, UINT Msg, WPARAM wPa
 	{
 		case WM_CLOSE:
 		{
-			this->~Window();
+			alive = false;
 			return 0;
 		}
 	}

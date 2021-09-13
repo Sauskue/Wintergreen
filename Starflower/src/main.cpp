@@ -1,31 +1,40 @@
 #include "pch.h"
 #include "Demos.h"
-#include "Application.h"
-//(TODO): add keyboard/mouse events
-//(TODO): put demo applications in demo.h
-//(TODO): window-specific events???
-//(TODO): does main_window need to be manually deleted or is it handled by destructor??
-//(TODO): work on main update-close loop
-//TEST CODE
-class PerlinN : public Application
-{
-private:
-	void OnCreate() override{}
+//TODO: add keyboard/mouse events
+//TODO: window-specific events???
 
-	void OnDestroy() override {}
-	void OnUpdate() override
-	{
-		std::cout << "Update called\n";
-	}
-
-	void OnRender() override
-	{
-		std::cout << "Render called\n";
-	}
-};
 
 int main()
 {
-	PerlinN demo;
+	while (true)
+	{
+		std::cout << "1) Perlin Noise\n";
+		std::cout << "2) Bezier Curves\n";
+		std::cout << "3) Game of Life\n";
+
+		std::cout << "\nPick a demo: ";
+		int i = 0;
+		std::cin >> i;
+		switch (i)
+		{
+			case 1:
+			{
+				PerlinNoise demo;
+				demo.Run();
+				break;
+			}
+			case 2:
+			{
+				break;
+			}
+			case 3:
+			{
+				break;
+			}
+			default:
+				break;
+		}
+	}
+	PerlinNoise demo;
 	demo.Run();
 }

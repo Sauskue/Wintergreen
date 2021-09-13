@@ -8,9 +8,7 @@ Application::Application()
 }
 
 Application::~Application()
-{
-	running = false;
-}
+{}
 
 void Application::Run()
 {
@@ -28,7 +26,7 @@ void Application::Run()
 void Application::Kill()
 {
 	OnDestroy();
-	this->~Application();
+	running = false;
 }
 
 bool Application::Update()
