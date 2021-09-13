@@ -9,7 +9,6 @@ Application::Application()
 
 Application::~Application()
 {
-	OnDestroy();
 	running = false;
 }
 
@@ -23,11 +22,12 @@ void Application::Run()
 		else
 			break;
 	}
-	this->~Application();
+	Kill();
 }
 
 void Application::Kill()
 {
+	OnDestroy();
 	this->~Application();
 }
 
