@@ -13,14 +13,12 @@ Application::~Application()
 void Application::Run()
 {
 	OnCreate();
-	while (true)
+	while (running)
 	{
-		if (Update())
+		Update();
+		if (running)
 			Render();
-		else
-			break;
 	}
-	Kill();
 }
 
 void Application::Kill()
@@ -29,13 +27,12 @@ void Application::Kill()
 	running = false;
 }
 
-bool Application::Update()
+void Application::Update()
 {
 	OnUpdate();
-	if (!Window::Update() || !running)
-		return false;
-	else
-		return true;
+	if (running)
+		if (!Window::Update())
+			running = false;
 }
 
 void Application::Render()

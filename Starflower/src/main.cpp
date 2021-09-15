@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "Demos.h"
+
+
 //TODO: add keyboard/mouse events
-//TODO: window-specific events???
+//TODO: multi-window functionality(window-specific event pumps?)
 
 
 int main()
@@ -19,8 +21,8 @@ int main()
 		{
 			case 1:
 			{
-				PerlinNoise demo;
-				demo.Run();
+				PerlinNoise noise_demo;
+				noise_demo.Run();
 				break;
 			}
 			case 2:
@@ -34,7 +36,6 @@ int main()
 			default:
 				break;
 		}
+		std::cout << "\n===================================\n";
 	}
-	PerlinNoise demo;
-	demo.Run();
 }

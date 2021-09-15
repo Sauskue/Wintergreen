@@ -8,10 +8,6 @@ public:
 	//methods
 	void Run();
 	void Kill();
-	void AddWindow()
-	{
-		Window* w = new Window();
-	}
 	virtual ~Application();
 protected:
 	//classes
@@ -70,7 +66,7 @@ private:
 	Window* main_window = nullptr;
 
 	//methods
-	bool Update();
+	void Update();
 	void Render();
 
 	virtual void OnCreate() = 0;
