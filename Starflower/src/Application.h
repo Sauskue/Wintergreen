@@ -15,6 +15,8 @@ protected:
 	{
 		friend class Application;
 	public:
+		//classes
+
 		//variables
 
 		//methods
@@ -34,11 +36,11 @@ protected:
 		const wchar_t* title = L"Window";
 		HWND window_handle = NULL;
 		bool alive = false;
-
+	
+		static std::vector<Window*> windows;
 		static WNDCLASS wc;
 		static bool registered;
-		static std::vector<Window*> windows;
-
+		
 		//methods
 		Window();
 		Window(int x, int y);
@@ -47,18 +49,31 @@ protected:
 
 		static bool Update();
 
+		HWND GetWindowHandle() const;
+		unsigned int GetWidth() const;
+		unsigned int GetHeight() const;
+
 		void SetPos(int x, int y);
-		void SetSize(int width, int height);
+		void SetSize(unsigned int width, unsigned int height);
 
 		static LRESULT CALLBACK StaticWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 		LRESULT CALLBACK WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
 	};
-	
+
 	//variables
 
 	//methods
 	Application();
+
+	/*TEST CODE*/
+	HWND GetMainWindowHandle() const;
+
+	/////////////
+
+
+	void SetPos(int x, int y);
+	void SetSize(unsigned int width, unsigned int height);
 private:
 	//variables
 	bool running = false;

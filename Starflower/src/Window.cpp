@@ -97,9 +97,28 @@ bool Application::Window::Update()
 	}
 
 	if (windows.size() == 0)
+	{
+		//cleanup
+		UnregisterClass(wc.lpszClassName, NULL);
 		return false;
+	}
 	else
 		return true;
+}
+
+HWND Application::Window::GetWindowHandle() const
+{
+	return window_handle;
+}
+
+unsigned int Application::Window::GetWidth() const
+{
+	return width;
+}
+
+unsigned int Application::Window::GetHeight() const
+{
+	return height;
 }
 
 LRESULT CALLBACK Application::Window::StaticWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
@@ -140,7 +159,7 @@ void Application::Window::SetPos(int x, int y)
 	this->y = y;
 }
 
-void Application::Window::SetSize(int width, int height)
+void Application::Window::SetSize(unsigned int width, unsigned int height)
 {
 	this->width = width;
 	this->height = height;
