@@ -21,8 +21,9 @@ int main()
 		{
 			case 1:
 			{
-				PerlinNoise noise_demo;
-				noise_demo.Run();
+				PerlinNoise* pnoise_demo = new PerlinNoise();
+				pnoise_demo->Run();
+				delete pnoise_demo;
 				break;
 			}
 			case 2:
@@ -34,8 +35,9 @@ int main()
 				break;
 			}
 			default:
-				break;
+				return 1;
 		}
 		std::cout << "\n===================================\n";
 	}
+	return 0;
 }

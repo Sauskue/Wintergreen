@@ -8,6 +8,8 @@ public:
 	//methods
 	void Run();
 	void Kill();
+	void SetPos(int x, int y);
+	void SetSize(unsigned int width, unsigned int height);
 	virtual ~Application();
 protected:
 	//classes
@@ -70,10 +72,6 @@ protected:
 	HWND GetMainWindowHandle() const;
 
 	/////////////
-
-
-	void SetPos(int x, int y);
-	void SetSize(unsigned int width, unsigned int height);
 private:
 	//variables
 	bool running = false;
@@ -81,6 +79,7 @@ private:
 	Window* main_window = nullptr;
 
 	//methods
+	void Create();
 	void Update();
 	void Render();
 

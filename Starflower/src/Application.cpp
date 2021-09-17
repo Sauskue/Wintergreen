@@ -2,10 +2,7 @@
 #include "Application.h"
 
 Application::Application()
-{
-	main_window = new Window();
-	running = true;
-}
+{}
 
 Application::~Application()
 {}
@@ -19,7 +16,7 @@ HWND Application::GetMainWindowHandle() const
 
 void Application::Run()
 {
-	OnCreate();
+	Create();
 	while (running)
 	{
 		Update();
@@ -31,7 +28,25 @@ void Application::Run()
 void Application::Kill()
 {
 	OnDestroy();
+	delete main_window;
 	running = false;
+}
+
+void Application::SetPos(int x, int y)
+{
+	main_window->SetPos(x, y);
+}
+
+void Application::SetSize(unsigned int width, unsigned int height)
+{
+	main_window->SetSize(width, height);
+}
+
+void Application::Create()
+{
+	main_window = new Window();
+	running = true;
+	OnCreate();
 }
 
 void Application::Update()

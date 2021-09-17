@@ -4,6 +4,7 @@
 WNDCLASS Application::Window::wc = { 0 };
 bool Application::Window::registered = false;
 std::vector<Application::Window*> Application::Window::windows = std::vector<Application::Window*>();
+static DWORD window_style = (WS_OVERLAPPEDWINDOW | WS_VISIBLE) & (~WS_THICKFRAME);
 
 Application::Window::Window():
 	Window(-1, -1, 0, 0)
@@ -38,25 +39,26 @@ Application::Window::Window(int x, int y, int width, int height):
 		registered = true;
 	}
 
-	if (!width == 0 && !height == 0)
+	RECT rc = {};
+	ZeroMemory(&rc, sizeof(RECT));
+	if (width != 0 && height != 0)
 	{
-		RECT rc;
 		rc.left = 0;
 		rc.top = 0;
 		rc.right = width;
 		rc.bottom = height;
-		AdjustWindowRect(&rc, (WS_OVERLAPPEDWINDOW | WS_VISIBLE) & (~WS_THICKFRAME), FALSE);
+		AdjustWindowRect(&rc, window_style, FALSE);
 	}
 
-	window_handle = CreateWindow
+ 	window_handle = CreateWindow
 	(
 		wc.lpszClassName,
 		title,
-		(WS_OVERLAPPEDWINDOW | WS_VISIBLE) & (~WS_THICKFRAME),
+		window_style,
 		(x != 0) ? x : CW_USEDEFAULT,
 		(y != 0) ? y : CW_USEDEFAULT,
-		(width != 0) ? width : CW_USEDEFAULT,
-		(height != 0) ? height : CW_USEDEFAULT,
+		(width != 0) ? (rc.right - rc.left) : CW_USEDEFAULT,
+		(height != 0) ? (rc.bottom - rc.top): CW_USEDEFAULT,
 		NULL,
 		NULL,
 		GetModuleHandle(NULL),
@@ -100,6 +102,7 @@ bool Application::Window::Update()
 	{
 		//cleanup
 		UnregisterClass(wc.lpszClassName, NULL);
+		registered = false;
 		return false;
 	}
 	else
@@ -157,10 +160,22 @@ void Application::Window::SetPos(int x, int y)
 {
 	this->x = x;
 	this->y = y;
+	
+	SetWindowPos(window_handle, HWND_TOP, x, y, width, height, SWP_NOSIZE | SWP_NOZORDER);
 }
 
 void Application::Window::SetSize(unsigned int width, unsigned int height)
 {
 	this->width = width;
 	this->height = height;
+	
+	RECT rc = {};
+	ZeroMemory(&rc, sizeof(RECT));
+	rc.left = 0;
+	rc.top = 0;
+	rc.right = width;
+	rc.bottom = height;
+	AdjustWindowRect(&rc, window_style, FALSE);
+
+	SetWindowPos(window_handle, HWND_TOP, x, y, rc.right - rc.left, rc.bottom - rc.top, SWP_NOMOVE | SWP_NOZORDER);
 }
