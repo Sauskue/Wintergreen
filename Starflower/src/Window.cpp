@@ -114,6 +114,16 @@ HWND Application::Window::GetWindowHandle() const
 	return window_handle;
 }
 
+int Application::Window::GetX() const
+{
+	return x;
+}
+
+int Application::Window::GetY() const
+{
+	return y;
+}
+
 unsigned int Application::Window::GetWidth() const
 {
 	return width;
@@ -146,6 +156,11 @@ LRESULT CALLBACK Application::Window::WindowProc(HWND hWnd, UINT Msg, WPARAM wPa
 {
 	switch (Msg)
 	{
+		case WM_KEYDOWN:
+		{
+
+			return 0;
+		}
 		case WM_CLOSE:
 		{
 			alive = false;

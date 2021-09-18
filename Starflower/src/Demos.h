@@ -4,6 +4,8 @@
 //window specific events?
 class PerlinNoise : public Application
 {
+public:
+protected:
 private:
 	//variables
 	static const int width = 800;
@@ -36,10 +38,35 @@ private:
 	float val(float x, float y);
 
 	void OnCreate() override;
-
 	void OnUpdate() override;
-
 	void OnRender() override;
+	void OnDestroy() override;
+};
 
+class BezierCurve : public Application
+{
+public:
+protected:
+private:
+	//variables
+	ID2D1Factory* d2d1_factory = nullptr;
+	ID2D1HwndRenderTarget* d2d1_rt = nullptr;
+	ID2D1SolidColorBrush* d2d1_brush = nullptr;
+	IDWriteFactory* dwrite_factory = nullptr;
+	IDWriteTextFormat* dwrite_tf = nullptr;
+	std::vector<D2D1_ELLIPSE> dots = {};
+	const int width = 800;
+	const int height = 600;
+	int index = 0;
+	const float radius = 7.0f;
+	float t = 0.5f;
+	const float speed = 1.0f;
+	bool hide_lines = false;
+	const float dark_grey = 0.1f;
+
+	//methods
+	void OnCreate() override;
+	void OnUpdate() override;
+	void OnRender() override;
 	void OnDestroy() override;
 };

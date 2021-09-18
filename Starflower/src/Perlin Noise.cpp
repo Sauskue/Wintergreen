@@ -170,7 +170,6 @@ void PerlinNoise::OnRender()
 
 void PerlinNoise::OnDestroy()
 {
-	HWND hWnd = GetMainWindowHandle();
 	constant_vectors.clear();
 	d2d1_brush->Release();
 	d2d1_rt->Release();

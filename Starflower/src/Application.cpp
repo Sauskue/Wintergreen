@@ -12,6 +12,36 @@ HWND Application::GetMainWindowHandle() const
 {
 	return main_window->GetWindowHandle();
 }
+
+bool Application::IsKeyPressed(KeyCode code) const
+{
+	return keyboard.IsKeyPressed(code);
+}
+
+bool Application::IsKeyPressed(unsigned int key) const
+{
+	return keyboard.IsKeyPressed(key);
+}
+
+bool Application::IsMouseInWindow() const
+{
+	return mouse.IsInWindow();
+}
+
+bool Application::IsMouseLeftDown() const
+{
+	return mouse.IsLeftDown();
+}
+
+bool Application::IsMouseMiddleDown() const
+{
+	return mouse.IsMiddleDown();
+}
+
+bool Application::IsMouseRightDown() const
+{
+	return mouse.IsRightDown();
+}
 /////////////
 
 void Application::Run()
