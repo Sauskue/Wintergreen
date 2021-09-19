@@ -22,9 +22,6 @@
     <ClCompile Include="src\GameOfLife.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Window.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Application.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -32,6 +29,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Mouse.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IOEvent.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

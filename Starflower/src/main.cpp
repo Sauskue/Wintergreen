@@ -1,10 +1,8 @@
 #include "pch.h"
 #include "Demos.h"
 
-
 //TODO: add keyboard/mouse events
-//TODO: multi-window functionality(window-specific event pumps?)
-
+//TODO: how do you handle rendering to multiple windows???
 
 int main()
 {

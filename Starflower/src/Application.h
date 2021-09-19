@@ -1,6 +1,6 @@
 #pragma once
 
-class Application
+class Keyboard
 {
 public:
 	enum class KeyCode
@@ -101,168 +101,155 @@ public:
 		SemiColon,
 		Apostrophe,
 	};
-private:
-	//classes
-
-	class Window
-	{
-		friend class Application;
-	public:
-		//classes
-
-		//variables
-
-		//methods
-
-	protected:
-		//variables
-
-		//methods
-
-	private:
-		//variables
-		int x = 0;
-		int y = 0;
-		int width = 0;
-		int height = 0;
-		int index = 0;
-		const wchar_t* title = L"Window";
-		HWND window_handle = NULL;
-		bool alive = false;
-
-		static std::vector<Window*> windows;
-		static WNDCLASS wc;
-		static bool registered;
-
-		//methods
-		Window();
-		Window(int x, int y);
-		Window(int x, int y, int width, int height);
-		~Window();
-
-		static bool Update();
-
-		HWND GetWindowHandle() const;
-		int GetX() const;
-		int GetY() const;
-		unsigned int GetWidth() const;
-		unsigned int GetHeight() const;
-
-		void SetPos(int x, int y);
-		void SetSize(unsigned int width, unsigned int height);
-
-		static LRESULT CALLBACK StaticWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
-		LRESULT CALLBACK WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
-
-	};
-
-	class Keyboard
-	{
-	public:
-		//classes
-
-		//variables
-
-		//methods
-		void OnKeyPress(KeyCode code);
-		void OnKeyPress(unsigned int key);
-		void OnKeyRelease(KeyCode code);
-		void OnKeyRelease(unsigned int key);
-
-		bool IsKeyPressed(KeyCode code) const;
-		bool IsKeyPressed(unsigned int key) const;
-
-	protected:
-	private:
-		//variables
-
-		//methods
-	};
-
-	class Mouse
-	{
-	public:
-		//variables
-
-		//methods
-		void OnLeftButtonDown(int x, int y);
-		void OnLeftButtonUp(int x, int y);
-		void OnMiddleButtonDown(int x, int y);
-		void OnMiddleButtonUp(int x, int y);
-		void OnRightButtonDown(int x, int y);
-		void OnRightButtonUp(int x, int y);
-		void OnMouseMove(int x, int y);
-		void OnRawMouseMove(int x, int y);
-		void OnMouseEnter();
-		void OnMouseLeave();
-		void OnMouseWheelUp(int x, int y);
-		void OnMouseWheelDown(int x, int y);
-		void OnMouseWheel(int x, int y, int delta);
-
-		bool IsInWindow() const;
-		bool IsLeftDown() const;
-		bool IsMiddleDown() const;
-		bool IsRightDown() const;
-	protected:
-	private:
-		//variables
-	};
-
-	//variables
-	bool running = false;
-
-	Window* main_window = nullptr;
-	Keyboard keyboard;
-	Mouse mouse;
-
-	//methods
-	void Create();
-	void Update();
-	void Render();
-
-	virtual void OnCreate() = 0;
-	virtual void OnUpdate() = 0;
-	virtual void OnRender() = 0;
-	virtual void OnDestroy() = 0;
-protected:
-	//classes
-
-	//variables
-
-	//methods
-	Application();
-
-
-	/*TEST CODE*/
-	HWND GetMainWindowHandle() const;
+	
+	void OnKeyPress(KeyCode code);
+	void OnKeyPress(unsigned int key);
+	void OnKeyRelease(KeyCode code);
+	void OnKeyRelease(unsigned int key);
 
 	bool IsKeyPressed(KeyCode code) const;
+	bool IsKeyPressed(unsigned int key) const;
+
+protected:
+private:
+	std::bitset<254> keys;
+	std::queue<Event> buffer;
+	const unsigned int max_buffer_size = 32u;
+
+	void TrimBuffer();
+	void FlushBuffer();
+};
+
+class Mouse
+{
+public:
+	void OnMouseLeftUp(int x, int y);
+	void OnMouseLeftDown(int x, int y);
+	void OnMouseMiddleUp(int x, int y);
+	void OnMouseMiddleDown(int x, int y);
+	void OnMouseRightUp(int x, int y);
+	void OnMouseRightDown(int x, int y);
+	void OnMouseMove(int x, int y);
+	void OnMouseRawMove(int x, int y);
+	void OnMouseEnter();
+	void OnMouseLeave();
+	void OnMouseWheel(int x, int y, int delta);
+	void OnMouseWheelUp(int x, int y);
+	void OnMouseWheelDown(int x, int y);
+
+	bool IsInWindow() const;
+	bool IsLeftDown() const;
+	bool IsMiddleDown() const;
+	bool IsRightDown() const;
+protected:
+private:
+	std::queue<Event> buffer;
+	const unsigned int max_buffer_size = 32u;
+	const int wheel_delta = 120;
+	bool left_pressed = false;
+	bool middle_pressed = false;
+	bool right_pressed = false;
+	bool in_window = false;
+	int x = 0;
+	int y = 0;
+	int z_delta = 0;
+
+	void TrimBuffer();
+	void FlushBuffer();
+};
+
+class Event
+{
+public:
+	enum class Type
+		{
+			KeyPress,
+			KeyRelease,
+			MouseLeftPress,
+			MouseLeftRelease,
+			MouseMiddlePress,
+			MouseMiddleRelease,
+			MouseRightPress,
+			MouseRightRelease,
+			MouseWheelUp,
+			MouseWheelDown,
+			MouseMove,
+			MouseRawMove,
+			MouseEnter,
+			MouseLeave,
+			Invalid
+		};
+
+	Event();
+	Event(Type type);
+	Event(Type type, int x, int y);
+	Event(Type type, unsigned int key);
+
+	int GetX() const;
+	int GetY() const;
+	Type GetType() const;
+	Keyboard::KeyCode GetKeyCode() const;
+protected:
+private:
+	int x;
+	int y;
+	unsigned int key;
+	Type type;
+};
+
+class Application
+{
+public:
+	//methods
+	void Run();
+	void Kill();
+	virtual ~Application();
+
+protected:
+	//methods
+	Application(int x = -1, int y = -1, unsigned int width = 0, unsigned int height = 0, const wchar_t* title = L"Window");
+
+	bool IsKeyPressed(Keyboard::KeyCode code) const;
 	bool IsKeyPressed(unsigned int key) const;
 	bool IsMouseInWindow() const;
 	bool IsMouseLeftDown() const;
 	bool IsMouseMiddleDown() const;
 	bool IsMouseRightDown() const;
+	bool IsBufferEmpty() const;
 
-	/////////////
-public:
-	//classes
-	class Event
-	{
-	public:
-	protected:
-	private:
-	};
-
-	//variables
-
-	//methods
-	void Run();
-	void Kill();
 	void SetPos(int x, int y);
 	void SetSize(unsigned int width, unsigned int height);
-	virtual ~Application();
 
+	Event GetEvent();
+
+private:
+	//variables
+	int x;
+	int y;
+	unsigned int width;
+	unsigned int height;
+	const wchar_t* title;
+	bool running;
+	HWND main_window_handle;
+
+	Keyboard keyboard;
+	Mouse mouse;
+
+	static bool registered;
+
+	//methods
+	void Create();
+	void Update();
+	void Render();
+	void Destroy();
+
+	virtual void OnCreate() = 0;
+	virtual void OnUpdate() = 0;
+	virtual void OnRender() = 0;
+	virtual void OnDestroy() = 0;
+
+	static LRESULT CALLBACK StaticWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
+	LRESULT CALLBACK WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 };
 
-
-#define KeyCode Application::KeyCode
+#define KeyCode Keyboard::KeyCode
