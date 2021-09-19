@@ -301,7 +301,6 @@ int BézierCurveDemo()
 
 void BezierCurve::OnCreate()
 {
-	HWND hWnd = GetMainWindowHandle();
 	HRESULT hr = D2D1CreateFactory
 	(
 		D2D1_FACTORY_TYPE_SINGLE_THREADED,
@@ -311,7 +310,7 @@ void BezierCurve::OnCreate()
 	hr = d2d1_factory->CreateHwndRenderTarget
 	(
 		D2D1::RenderTargetProperties(),
-		D2D1::HwndRenderTargetProperties(hWnd, D2D1::SizeU(width, height)),
+		D2D1::HwndRenderTargetProperties(main_window_handle, D2D1::SizeU(width, height)),
 		&d2d1_rt
 	);
 	hr = d2d1_rt->CreateSolidColorBrush
@@ -353,8 +352,7 @@ void BezierCurve::OnUpdate()
 		{
 			POINT p;
 			GetCursorPos(&p);
-			HWND hWnd = GetMainWindowHandle();
-			ScreenToClient(hWnd, &p);
+			ScreenToClient(main_window_handle, &p);
 			dots.at(index).point = D2D1::Point2F((float)p.x, (float)p.y);
 		}
 	}
@@ -464,7 +462,7 @@ void BezierCurve::OnRender()
 		"ESCAPE: EXIT",
 		156,
 		dwrite_tf,
-		D2D1::RectF(0.0f, 0.0f, width, 50.0f),
+		D2D1::RectF(0.0f, 0.0f, (float)width, 50.0f),
 		d2d1_brush,
 		D2D1_DRAW_TEXT_OPTIONS_NONE,
 		DWRITE_MEASURING_MODE_NATURAL

@@ -109,15 +109,9 @@ public:
 
 	bool IsKeyPressed(KeyCode code) const;
 	bool IsKeyPressed(unsigned int key) const;
-
 protected:
 private:
 	std::bitset<254> keys;
-	std::queue<Event> buffer;
-	const unsigned int max_buffer_size = 32u;
-
-	void TrimBuffer();
-	void FlushBuffer();
 };
 
 class Mouse
@@ -143,8 +137,6 @@ public:
 	bool IsRightDown() const;
 protected:
 private:
-	std::queue<Event> buffer;
-	const unsigned int max_buffer_size = 32u;
 	const int wheel_delta = 120;
 	bool left_pressed = false;
 	bool middle_pressed = false;
@@ -154,8 +146,6 @@ private:
 	int y = 0;
 	int z_delta = 0;
 
-	void TrimBuffer();
-	void FlushBuffer();
 };
 
 class Event
@@ -185,6 +175,12 @@ public:
 	Event(Type type, int x, int y);
 	Event(Type type, unsigned int key);
 
+	static void FlushBuffer();
+	static bool IsBufferEmpty();
+	static void Push(Event e);
+
+	static Event ReadBuffer();
+
 	int GetX() const;
 	int GetY() const;
 	Type GetType() const;
@@ -195,6 +191,8 @@ private:
 	int y;
 	unsigned int key;
 	Type type;
+	
+	static void TrimBuffer();
 };
 
 class Application
@@ -206,6 +204,9 @@ public:
 	virtual ~Application();
 
 protected:
+	//variables
+	HWND main_window_handle;
+	
 	//methods
 	Application(int x = -1, int y = -1, unsigned int width = 0, unsigned int height = 0, const wchar_t* title = L"Window");
 
@@ -215,12 +216,12 @@ protected:
 	bool IsMouseLeftDown() const;
 	bool IsMouseMiddleDown() const;
 	bool IsMouseRightDown() const;
-	bool IsBufferEmpty() const;
+	bool IsEventBufferEmpty() const;
 
 	void SetPos(int x, int y);
 	void SetSize(unsigned int width, unsigned int height);
 
-	Event GetEvent();
+	Event ReadEventBuffer();
 
 private:
 	//variables
@@ -230,7 +231,6 @@ private:
 	unsigned int height;
 	const wchar_t* title;
 	bool running;
-	HWND main_window_handle;
 
 	Keyboard keyboard;
 	Mouse mouse;

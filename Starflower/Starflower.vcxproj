@@ -257,7 +257,7 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Bézier Curve.cpp" />
     <ClCompile Include="src\GameOfLife.cpp" />
-    <ClCompile Include="src\IOEvent.cpp" />
+    <ClCompile Include="src\Event.cpp" />
     <ClCompile Include="src\Keyboard.cpp" />
     <ClCompile Include="src\Mouse.cpp" />
     <ClCompile Include="src\pch.cpp">

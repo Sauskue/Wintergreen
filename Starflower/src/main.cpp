@@ -26,6 +26,9 @@ int main()
 			}
 			case 2:
 			{
+				BezierCurve* bcurve_demo = new BezierCurve();
+				bcurve_demo->Run();
+				delete bcurve_demo;
 				break;
 			}
 			case 3:

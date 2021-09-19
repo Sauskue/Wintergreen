@@ -208,13 +208,19 @@ bool Application::IsMouseRightDown() const
 	return mouse.IsRightDown();
 }
 
+bool Application::IsEventBufferEmpty() const
+{
+	return Event::IsBufferEmpty();
+}
+
 void Application::Run()
 {
 	Create();
 	while (running)
 	{
 		Update();
-		Render();
+		if (running)
+			Render();
 	}
 }
 
@@ -285,4 +291,9 @@ void Application::Destroy()
 	UnregisterClass(wc.lpszClassName, NULL);
 	DestroyWindow(main_window_handle);
 	running = false;
+}
+
+Event Application::ReadEventBuffer()
+{
+	return Event::ReadBuffer();
 }

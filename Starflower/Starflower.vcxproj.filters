@@ -31,7 +31,7 @@
     <ClCompile Include="src\Mouse.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\IOEvent.cpp">
+    <ClCompile Include="src\Event.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

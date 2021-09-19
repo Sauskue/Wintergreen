@@ -51,7 +51,6 @@ void PerlinNoise::OnCreate()
 {
 	SetSize(width, height);
 	SetPos(200, 200);
-	HWND hWnd = GetMainWindowHandle();
 	{
 		HRESULT hr = D2D1CreateFactory
 		(
@@ -62,7 +61,7 @@ void PerlinNoise::OnCreate()
 		hr = d2d1_factory->CreateHwndRenderTarget
 		(
 			D2D1::RenderTargetProperties(),
-			D2D1::HwndRenderTargetProperties(hWnd, D2D1::SizeU(width, height)),
+			D2D1::HwndRenderTargetProperties(main_window_handle, D2D1::SizeU(width, height)),
 			&d2d1_rt
 		);
 		hr = d2d1_rt->CreateSolidColorBrush
@@ -85,12 +84,12 @@ void PerlinNoise::OnCreate()
 	{
 		constant_vectors.push_back(gradients[std::rand() % 4]);
 	}
-	win_dc = GetDC(hWnd);
+	win_dc = GetDC(main_window_handle);
 
 	mem_dc = CreateCompatibleDC(win_dc);
 
 	RECT rc;
-	GetClientRect(hWnd, &rc);
+	GetClientRect(main_window_handle, &rc);
 
 	BITMAPINFO bmi;
 	ZeroMemory(&bmi, sizeof(BITMAPINFO));
