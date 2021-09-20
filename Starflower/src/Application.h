@@ -45,7 +45,7 @@ public:
 		Alt = VK_MENU,
 		Enter = VK_RETURN,
 		Space = VK_SPACE,
-		BackSpace = VK_BACK,
+		Backspace = VK_BACK,
 		Comma = VK_OEM_COMMA,
 		Period = VK_OEM_PERIOD,
 		NumPadZero = VK_NUMPAD0,
