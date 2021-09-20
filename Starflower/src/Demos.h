@@ -79,12 +79,16 @@ public:
 protected:
 private:
 	//variables
-	const int width = 800;
-	const int height = 600;
+	static const int width = 800;
+	static const int height = 600;
 	HDC win_dc = NULL;
 	HDC mem_dc = NULL;
 	HBITMAP bmp = NULL;
 
+	bool cells[height][width] = { 0 };
+	bool cells_next[height][width] = { 0 };
+	const int scale = 1;
+	unsigned char* bits = nullptr;
 	//methods
 	void OnCreate() override;
 	void OnUpdate() override;
