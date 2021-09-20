@@ -301,6 +301,7 @@ int BézierCurveDemo()
 
 void BezierCurve::OnCreate()
 {
+	SetSize(width, height);
 	HRESULT hr = D2D1CreateFactory
 	(
 		D2D1_FACTORY_TYPE_SINGLE_THREADED,
@@ -346,7 +347,32 @@ void BezierCurve::OnUpdate()
 	frame_delta = elapsed_time.count();
 	last_time = std::chrono::high_resolution_clock::now();
 	
-	if (IsMouseLeftDown() && IsKeyPressed(KeyCode::Shift))
+	while (!Event::IsBufferEmpty())
+	{
+		Event e = Event::ReadBuffer();
+		if (e.GetType() == Event::Type::KeyPress)
+		{
+			if (e.GetKeyCode() == KeyCode::Escape)
+				Kill();
+		}
+		else if (e.GetType() == Event::Type::MouseLeftPress)
+		{
+			if (IsKeyPressed(KeyCode::Shift))
+			{
+				D2D1_ELLIPSE dot;
+				dot.point = D2D1::Point2F
+				(
+					(float)e.GetX(),
+					(float)e.GetY()
+				);
+				dot.radiusX = radius;
+				dot.radiusY = radius;
+				dots.push_back(dot);
+				index = (int)dots.size() - 1;
+			}
+		}
+	}
+	if (IsMouseLeftDown() && !IsKeyPressed(KeyCode::Shift))
 	{
 		if (dots.size() > 0)
 		{
@@ -356,7 +382,6 @@ void BezierCurve::OnUpdate()
 			dots.at(index).point = D2D1::Point2F((float)p.x, (float)p.y);
 		}
 	}
-
 	if (IsKeyPressed(KeyCode::Left))
 		t -= speed * frame_delta;
 	if (IsKeyPressed(KeyCode::Right))
