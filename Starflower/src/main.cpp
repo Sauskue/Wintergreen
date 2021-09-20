@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Demos.h"
 
-//TODO: add keyboard/mouse events
+//TODO: add game of life
 //TODO: how do you handle rendering to multiple windows???
 
 int main()
@@ -33,6 +33,9 @@ int main()
 			}
 			case 3:
 			{
+				GameOfLife* gol_demo = new GameOfLife();
+				gol_demo->Run();
+				delete gol_demo;
 				break;
 			}
 			default:

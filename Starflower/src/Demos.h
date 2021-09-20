@@ -59,10 +59,31 @@ private:
 	const int height = 600;
 	int index = 0;
 	const float radius = 7.0f;
+	const float outline_radius = radius * 2;
 	float t = 0.5f;
 	const float speed = 1.0f;
 	bool hide_lines = false;
+	bool hide_text = false;
 	const float dark_grey = 0.1f;
+
+	//methods
+	void OnCreate() override;
+	void OnUpdate() override;
+	void OnRender() override;
+	void OnDestroy() override;
+};
+
+class GameOfLife : public Application
+{
+public:
+protected:
+private:
+	//variables
+	const int width = 800;
+	const int height = 600;
+	HDC win_dc = NULL;
+	HDC mem_dc = NULL;
+	HBITMAP bmp = NULL;
 
 	//methods
 	void OnCreate() override;

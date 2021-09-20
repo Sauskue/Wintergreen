@@ -1,23 +1,6 @@
 #include "pch.h"
 #include "Demos.h"
 
-static ID2D1Factory* d2d1_factory = nullptr;
-static ID2D1HwndRenderTarget* d2d1_rt = nullptr;
-static ID2D1SolidColorBrush* d2d1_brush = nullptr;
-static IDWriteFactory* dwrite_factory = nullptr;
-static IDWriteTextFormat* dwrite_tf = nullptr;
-static std::vector<D2D1_ELLIPSE> dots = {};
-static const int width = 800;
-static const int height = 600;
-static int index = 0;
-static const float radius = 7.0f;
-static const float outline_radius = radius * 2;
-static float t = 0.5f;
-static const float speed = 1.0f;
-static bool hide_lines = false;
-static bool hide_text = false;
-static const float dark_grey = 0.1f;
-
 void BezierCurve::OnCreate()
 {
 	SetSize(width, height);
