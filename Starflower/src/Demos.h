@@ -95,3 +95,19 @@ private:
 	void OnRender() override;
 	void OnDestroy() override;
 };
+
+class AStar : public Application
+{
+public:
+protected:
+private:
+	//variables
+	const unsigned int width = 800;
+	const unsigned int height = 600;
+
+	//methods
+	void OnCreate() override;
+	void OnUpdate() override;
+	void OnRender() override;
+	void OnDestroy() override;
+};

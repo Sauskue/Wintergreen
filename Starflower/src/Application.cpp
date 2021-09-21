@@ -253,6 +253,12 @@ void Application::SetSize(unsigned int width, unsigned int height)
 	SetWindowPos(main_window_handle, HWND_TOP, x, y, rc.right - rc.left, rc.bottom - rc.top, SWP_NOMOVE | SWP_NOZORDER);
 }
 
+void Application::SetTitle(const wchar_t* title)
+{
+	this->title = title;
+	SetWindowText(main_window_handle, title);
+}
+
 void Application::Create()
 {
 	OnCreate();

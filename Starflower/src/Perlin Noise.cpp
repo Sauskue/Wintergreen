@@ -51,6 +51,7 @@ void PerlinNoise::OnCreate()
 {
 	SetSize(width, height);
 	SetPos(200, 200);
+	SetTitle(L"Perlin Noise");
 	{
 		HRESULT hr = D2D1CreateFactory
 		(

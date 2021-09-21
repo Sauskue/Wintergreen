@@ -16,6 +16,7 @@ const int GameOfLife::height;
 void GameOfLife::OnCreate()
 {
 	SetSize(width, height);
+	SetTitle(L"Conway's Game of Life");
 	win_dc = GetDC(main_window_handle);
 	mem_dc = CreateCompatibleDC(win_dc);
 

@@ -220,6 +220,7 @@ protected:
 
 	void SetPos(int x, int y);
 	void SetSize(unsigned int width, unsigned int height);
+	void SetTitle(const wchar_t* title);
 
 	Event ReadEventBuffer();
 

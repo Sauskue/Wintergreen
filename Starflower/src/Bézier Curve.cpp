@@ -4,6 +4,7 @@
 void BezierCurve::OnCreate()
 {
 	SetSize(width, height);
+	SetTitle(L"Bézier Curves");
 	HRESULT hr = D2D1CreateFactory
 	(
 		D2D1_FACTORY_TYPE_SINGLE_THREADED,
