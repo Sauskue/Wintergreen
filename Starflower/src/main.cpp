@@ -2,8 +2,11 @@
 #include "Demos.h"
 
 //TODO: A* pathfinding
-//TODO: how do you handle rendering to multiple windows???
+//TODO: Binary search tree
 //TODO: BOMBERMAN!!!!
+//TODO: how do you handle rendering to multiple windows???
+//TODO: create graphics framework
+
 int main()
 {
 	while (true)

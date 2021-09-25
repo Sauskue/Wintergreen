@@ -1,7 +1,6 @@
 #pragma once
 #include "Application.h"
 
-//window specific events?
 class PerlinNoise : public Application
 {
 public:
@@ -99,15 +98,51 @@ private:
 class AStar : public Application
 {
 public:
+	//classes
+	struct Node
+	{
+	public:
+		Node(int x, int y);
+		
+		int x;
+		int y;
+		int local_goal;
+		int global_goal;
+		bool visited;
+		Node* parent;
+		std::vector<Node*> neighbors;
+
+		bool operator<(const Node& other);
+	protected:
+	private:
+	};
 protected:
 private:
+
 	//variables
 	const unsigned int width = 800;
 	const unsigned int height = 600;
+
+	static const int node_radius = 10;
+	static const int node_border = node_radius * 10;
+
+	Node* start_node;
+	Node* end_node;
+	Node* selected_node;
+	
+	std::vector<Node*> nodes;
+	std::vector<Node*> open_list;
+	std::vector<Node*> closed_list;
+
+	ID2D1Factory* d2d1_factory = nullptr;
+	ID2D1HwndRenderTarget* d2d1_rt = nullptr;
+	ID2D1SolidColorBrush* d2d1_brush = nullptr;
 
 	//methods
 	void OnCreate() override;
 	void OnUpdate() override;
 	void OnRender() override;
 	void OnDestroy() override;
+
+	void RunAlgorithm();
 };
