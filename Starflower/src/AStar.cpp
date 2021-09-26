@@ -25,9 +25,9 @@
 
 static int del_index = -1;
 
-unsigned int distance(AStar::Node* a, AStar::Node* b)
+float distance(AStar::Node* a, AStar::Node* b)
 {
-	return ((b->x - a->x) * (b->x - a->x)) + ((b->y - a->y) * (b->y - a->y));
+	return sqrtf(((b->x - a->x) * (b->x - a->x)) + ((b->y - a->y) * (b->y - a->y)));
 }
 
 AStar::Node::Node(int x, int y):
