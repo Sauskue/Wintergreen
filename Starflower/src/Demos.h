@@ -106,8 +106,8 @@ public:
 		
 		int x;
 		int y;
-		int local_goal;
-		int global_goal;
+		unsigned int local_goal;
+		unsigned int global_goal;
 		bool visited;
 		Node* parent;
 		std::vector<Node*> neighbors;
@@ -125,6 +125,7 @@ private:
 
 	static const int node_radius = 10;
 	static const int node_border = node_radius * 10;
+	static const int selection_node_radius = node_radius + 5;
 
 	Node* start_node;
 	Node* end_node;
@@ -137,6 +138,8 @@ private:
 	ID2D1Factory* d2d1_factory = nullptr;
 	ID2D1HwndRenderTarget* d2d1_rt = nullptr;
 	ID2D1SolidColorBrush* d2d1_brush = nullptr;
+	IDWriteFactory* dwrite_factory = nullptr;
+	IDWriteTextFormat* dwrite_tf = nullptr;
 
 	//methods
 	void OnCreate() override;
@@ -145,4 +148,15 @@ private:
 	void OnDestroy() override;
 
 	void RunAlgorithm();
+};
+
+class ParticleEffects : public Application
+{
+public:
+protected:
+private:
+	void OnCreate() override;
+	void OnUpdate() override;
+	void OnRender() override;
+	void OnDestroy() override;
 };

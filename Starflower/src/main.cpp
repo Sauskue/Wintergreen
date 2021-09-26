@@ -15,6 +15,7 @@ int main()
 		std::cout << "2) Bezier Curves\n";
 		std::cout << "3) Game of Life\n";
 		std::cout << "4) A*\n";
+		std::cout << "5) Particle Effects\n";
 
 		std::cout << "\nPick a demo: ";
 		int i = 0;
@@ -48,6 +49,12 @@ int main()
 				ax_demo->Run();
 				delete ax_demo;
 				break;
+			}
+			case 5:
+			{
+				/*ParticleEffects* pfx_demo = new ParticleEffects();
+				pfx_demo->Run();
+				delete pfx_demo;*/
 			}
 			default:
 				return 1;
