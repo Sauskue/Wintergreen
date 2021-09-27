@@ -158,13 +158,16 @@ public:
 	struct Particle
 	{
 	public:
-		Particle(int x, int y);
+		Particle(float x, float y);
+		
+		float x;
+		float y;
+		float v_x;
+		float v_y;
+
+		float opacity;
 	protected:
 	private:
-		int x;
-		int y;
-		int v_x;
-		int v_y;
 	};
 
 protected:
@@ -174,6 +177,10 @@ private:
 	const wchar_t* title = L"Particle Effects";
 
 	std::vector<Particle> particles = std::vector<Particle>();
+
+	ID2D1Factory* d2d1_factory = nullptr;
+	ID2D1HwndRenderTarget* d2d1_rt = nullptr;
+	ID2D1SolidColorBrush* d2d1_brush = nullptr;
 
 	void OnCreate() override;
 	void OnUpdate() override;
