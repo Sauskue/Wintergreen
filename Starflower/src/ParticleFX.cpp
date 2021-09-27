@@ -38,8 +38,6 @@ void ParticleFX::OnCreate()
 		D2D1::ColorF(D2D1::ColorF::White),
 		&d2d1_brush
 	);
-	/*for (int i = 0; i < 50; i++)
-		particles.push_back(Particle(width / 2, height - 50));*/
 }
 
 void ParticleFX::OnUpdate()
@@ -51,11 +49,18 @@ void ParticleFX::OnUpdate()
 		p.y += p.v_y;
 		if (p.x <= 0 || p.x >= width || p.y <= 0 || p.y >= height)
 		{
-			/*particles.erase(particles.begin() + i);
-			i--;*/
+			particles.erase(particles.begin() + i);
+			i--;
 		}
 	}
-	particles.push_back(Particle(width / 2, height - 50));
+	Particle p(width / 2, height - 50);
+	p.v_x = (float)GetMouseX() - p.x;
+	p.v_y = (float)GetMouseY() - p.y;
+	/*float range_vx = ((float(rand()) / float(RAND_MAX)) * (v_x_max - v_x_min)) + v_x_min;
+	p.v_x += range_vx;*/
+	/*float range_vy = ((float(rand()) / float(RAND_MAX)) * (v_y_max - v_y_min)) + v_y_min;
+	p.v_y += range_vy;*/
+	particles.push_back(p);
 }
 
 void ParticleFX::OnRender()

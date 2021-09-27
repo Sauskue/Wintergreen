@@ -213,6 +213,16 @@ bool Application::IsEventBufferEmpty() const
 	return Event::IsBufferEmpty();
 }
 
+int Application::GetMouseX() const
+{
+	return mouse.GetX();
+}
+
+int Application::GetMouseY() const
+{
+	return mouse.GetY();
+}
+
 void Application::Run()
 {
 	Create();
