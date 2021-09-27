@@ -1,9 +1,8 @@
 #include "pch.h"
 #include "Demos.h"
 
-//TODO: A* pathfinding
-//TODO: Binary search tree
-//TODO: BOMBERMAN!!!!
+//TODO: ParticleFX
+//TODO: Pong
 //TODO: how do you handle rendering to multiple windows???
 //TODO: create graphics framework
 
@@ -52,9 +51,9 @@ int main()
 			}
 			case 5:
 			{
-				/*ParticleEffects* pfx_demo = new ParticleEffects();
+				ParticleFX* pfx_demo = new ParticleFX();
 				pfx_demo->Run();
-				delete pfx_demo;*/
+				delete pfx_demo;
 			}
 			default:
 				return 1;

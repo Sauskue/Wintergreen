@@ -106,8 +106,8 @@ public:
 		
 		int x;
 		int y;
-		unsigned int local_goal;
-		unsigned int global_goal;
+		float local_goal;
+		float global_goal;
 		bool visited;
 		Node* parent;
 		std::vector<Node*> neighbors;
@@ -126,6 +126,8 @@ private:
 	static const int node_radius = 10;
 	static const int node_border = node_radius * 10;
 	static const int selection_node_radius = node_radius + 5;
+
+	bool quick_mode = false;
 
 	Node* start_node;
 	Node* end_node;
@@ -150,11 +152,29 @@ private:
 	void RunAlgorithm();
 };
 
-class ParticleEffects : public Application
+class ParticleFX : public Application
 {
 public:
+	struct Particle
+	{
+	public:
+		Particle(int x, int y);
+	protected:
+	private:
+		int x;
+		int y;
+		int v_x;
+		int v_y;
+	};
+
 protected:
 private:
+	const unsigned int width = 600;
+	const unsigned int height = 600;
+	const wchar_t* title = L"Particle Effects";
+
+	std::vector<Particle> particles = std::vector<Particle>();
+
 	void OnCreate() override;
 	void OnUpdate() override;
 	void OnRender() override;

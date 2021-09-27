@@ -1,40 +1,18 @@
 #include "pch.h"
 #include "Demos.h"
 
-
-/*A Star
-* 2-D grid of nodes
-* f(n) = g(n) + h(n)
-* node cost = distance from start to current + heuristic
-* heuristic = shortest distance(straight line distance) to end node
-* open set = nodes that haven't been evaluated yet
-* closed set = nodes that have been evaluated
-* algorithm finishes when open set is empty(no solution) or when optimal route is found
-* open set starts with start node, closed set starts empty
-* NODE CLASS
-* neighbors,
-* parent,
-* local(distance from start node to current node),
-* global(heuristic - straight line distance to end goal)
-* 
-* RULES
-* start node -> global dist
-* discover start node neighbors
-* 
-*/
-
 static int del_index = -1;
 
 float distance(AStar::Node* a, AStar::Node* b)
 {
-	return sqrtf(((b->x - a->x) * (b->x - a->x)) + ((b->y - a->y) * (b->y - a->y)));
+	return sqrtf((float)((b->x - a->x) * (b->x - a->x)) + (float)((b->y - a->y) * (b->y - a->y)));
 }
 
 AStar::Node::Node(int x, int y):
 	x(x),
 	y(y),
-	local_goal(INT_MAX),
-	global_goal(INT_MAX),
+	local_goal(std::numeric_limits<float>::max()),
+	global_goal(std::numeric_limits<float>::max()),
 	visited(false),
 	parent(nullptr),
 	neighbors(std::vector<Node*>())
@@ -97,13 +75,13 @@ void AStar::OnUpdate()
 		{
 			if (e.GetKeyCode() == KeyCode::Shift)
 			{
-				if(selected_node && selected_node != end_node)
+				if (selected_node && selected_node != end_node)
 				{
 					if (selected_node == start_node)
 						start_node = nullptr;
 					else
 						start_node = selected_node;
-						
+
 				}
 			}
 			else if (e.GetKeyCode() == KeyCode::Control)
@@ -126,7 +104,7 @@ void AStar::OnUpdate()
 						end_node = nullptr;
 					for (Node* neighbor : selected_node->neighbors)
 					{
-						for (int i = 0; i < neighbor->neighbors.size(); i++)
+						for (unsigned int i = 0; i < neighbor->neighbors.size(); i++)
 						{
 							if (neighbor->neighbors[i] == selected_node)
 							{
@@ -140,6 +118,8 @@ void AStar::OnUpdate()
 					selected_node = nullptr;
 				}
 			}
+			else if (e.GetKeyCode() == KeyCode::Space)
+				quick_mode = !quick_mode;
 		}
 		else if (e.GetType() == Event::Type::MouseLeftPress)
 		{
@@ -147,7 +127,7 @@ void AStar::OnUpdate()
 			int m_y = e.GetY();
 			bool mark_for_delete = false;
 			bool mark_for_create = true;
-			for (int i = 0; i < nodes.size(); i++)
+			for (unsigned int i = 0; i < nodes.size(); i++)
 			{
 				Node* current_node = nodes[i];
 				int node_x = current_node->x;
@@ -189,7 +169,7 @@ void AStar::OnUpdate()
 			{
 				int m_x = e.GetX();
 				int m_y = e.GetY();
-				for (int i = 0; i < nodes.size(); i++)
+				for (unsigned int i = 0; i < nodes.size(); i++)
 				{
 					Node* current_node = nodes[i];
 					int node_x = nodes[i]->x;
@@ -207,7 +187,7 @@ void AStar::OnUpdate()
 						bool add1 = true;
 						int j1;
 						int j2;
-						for (int j = 0; j < current_node->neighbors.size(); j++)
+						for (unsigned int j = 0; j < current_node->neighbors.size(); j++)
 						{
 							if (current_node->neighbors[j] == selected_node)
 							{
@@ -220,7 +200,7 @@ void AStar::OnUpdate()
 						else
 							current_node->neighbors.erase(current_node->neighbors.begin() + j1);
 						bool add2 = true;
-						for (int j = 0; j < selected_node->neighbors.size(); j++)
+						for (unsigned int j = 0; j < selected_node->neighbors.size(); j++)
 						{
 							if (selected_node->neighbors[j] == current_node)
 							{
@@ -244,17 +224,17 @@ void AStar::OnRender()
 {
 	d2d1_rt->BeginDraw();
 	d2d1_rt->Clear(D2D1::ColorF(D2D1::ColorF::Black));
-	d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::RoyalBlue));
+	d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::MidnightBlue));
 	for (Node* node : nodes)
 	{
 			D2D1_POINT_2F node_point;
-			node_point.x = node->x;
-			node_point.y = node->y;
+			node_point.x = (float)node->x;
+			node_point.y = (float)node->y;
 		for (Node* neighbor : node->neighbors)
 		{
 			D2D1_POINT_2F neighbor_point;
-			neighbor_point.x = neighbor->x;
-			neighbor_point.y = neighbor->y;
+			neighbor_point.x = (float)neighbor->x;
+			neighbor_point.y = (float)neighbor->y;
 			d2d1_rt->DrawLine(node_point, neighbor_point, d2d1_brush);
 		}
 	}
@@ -265,11 +245,11 @@ void AStar::OnRender()
 		while (pathNode->parent)
 		{
 			D2D1_POINT_2F node_point;
-			node_point.x = pathNode->x;
-			node_point.y = pathNode->y;
+			node_point.x = (float)pathNode->x;
+			node_point.y = (float)pathNode->y;
 			D2D1_POINT_2F parent_point;
-			parent_point.x = pathNode->parent->x;
-			parent_point.y = pathNode->parent->y;
+			parent_point.x = (float)pathNode->parent->x;
+			parent_point.y = (float)pathNode->parent->y;
 			d2d1_rt->DrawLine(node_point, parent_point, d2d1_brush);
 			pathNode = pathNode->parent;
 		}
@@ -277,15 +257,15 @@ void AStar::OnRender()
 	for (Node* node : nodes)
 	{
 		D2D1_ELLIPSE e;
-		e.point.x = node->x;
-		e.point.y = node->y;
+		e.point.x = (float)node->x;
+		e.point.y = (float)node->y;
 		e.radiusX = node_radius;
 		e.radiusY = node_radius;
 		if (node == selected_node)
 		{
 			D2D1_ELLIPSE se;
-			se.point.x = node->x;
-			se.point.y = node->y;
+			se.point.x = (float)node->x;
+			se.point.y = (float)node->y;
 			se.radiusX = selection_node_radius;
 			se.radiusY = selection_node_radius;
 			d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::Yellow));
@@ -296,9 +276,9 @@ void AStar::OnRender()
 		else if (node == end_node)
 			d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::Red));
 		else if (node->visited)
-			d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::Blue));
+			d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::MidnightBlue));
 		else
-			d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::RoyalBlue));
+			d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::CadetBlue));
 		d2d1_rt->FillEllipse(e, d2d1_brush);
 	}
 
@@ -309,7 +289,8 @@ void AStar::OnRender()
 		"SHIFT: SET START NODE\n"
 		"CONTROL: SET END NODE\n"
 		"CLICK ON POINT: TOGGLE ACTIVE POINT\n"
-		"BACKSPACE: DELETE SELECTED POINT\n";
+		"BACKSPACE: DELETE SELECTED POINT\n"
+		"SPACE: TOGGLE ALL PATHS/FIRST PATH";
 	d2d1_rt->DrawText
 	(
 		text,
@@ -347,18 +328,18 @@ void AStar::RunAlgorithm()
 	{
 		node->parent = nullptr;
 		node->visited = false;
-		node->local_goal = std::numeric_limits<unsigned int>::max();
-		node->global_goal = std::numeric_limits<unsigned int>::max();
+		node->local_goal = std::numeric_limits<float>::max();
+		node->global_goal = std::numeric_limits<float>::max();
 	}
-	open_list.empty();
-	closed_list.empty();
+	open_list.clear();
+	closed_list.clear();
 
 	Node* current_node = start_node;
 	start_node->local_goal = 0;
 	start_node->global_goal = distance(start_node, end_node);
 	open_list.push_back(start_node);
 
-	while (!open_list.empty())
+	while (!open_list.empty() && (quick_mode ? !end_node->visited : true))
 	{
 		std::sort(open_list.begin(), open_list.end());
 		while (!open_list.empty() && open_list.front()->visited)
