@@ -54,6 +54,7 @@ int main()
 				ParticleFX* pfx_demo = new ParticleFX();
 				pfx_demo->Run();
 				delete pfx_demo;
+				break;
 			}
 			default:
 				return 1;

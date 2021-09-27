@@ -1,18 +1,18 @@
 #include "pch.h"
 #include "Demos.h"
 
-float v_x_max = 1;
-float v_x_min = -1;
-float v_y_min = -5;
-float v_y_max = -10;
+float v_x_max = .5f;
+float v_x_min = -.5f;
+float v_y_min = -.5f;
+float v_y_max = .5f;
 float opacity_max = 1.0f;
 float opacity_min = .01f;
 
-ParticleFX::Particle::Particle(float x, float y):
+ParticleFX::Particle::Particle(float x, float y, float v_x, float v_y):
 	x(x),
 	y(y),
-	v_x(((float(rand()) / float(RAND_MAX)) * (v_x_max - v_x_min)) + v_x_min),
-	v_y(((float(rand()) / float(RAND_MAX)) * (v_y_max - v_y_min)) + v_y_min),
+	v_x(v_x),
+	v_y(v_y),
 	opacity(((float(rand()) / float(RAND_MAX))* (opacity_max - opacity_min)) + opacity_min)
 {}
 
@@ -38,10 +38,20 @@ void ParticleFX::OnCreate()
 		D2D1::ColorF(D2D1::ColorF::White),
 		&d2d1_brush
 	);
+	particles.push_back(Particle(x, y, 0, 0));
 }
 
 void ParticleFX::OnUpdate()
 {
+	if (IsKeyPressed(KeyCode::A))
+		x -= move_speed;
+	if (IsKeyPressed(KeyCode::D))
+		x += move_speed;
+	if (IsKeyPressed(KeyCode::W))
+		y -= move_speed;
+	if (IsKeyPressed(KeyCode::S))
+		y += move_speed;
+
 	for (unsigned int i = 0; i < particles.size(); i++)
 	{
 		Particle& p = particles.at(i);
@@ -53,13 +63,17 @@ void ParticleFX::OnUpdate()
 			i--;
 		}
 	}
-	Particle p(width / 2, height - 50);
-	p.v_x = (float)GetMouseX() - p.x;
-	p.v_y = (float)GetMouseY() - p.y;
-	/*float range_vx = ((float(rand()) / float(RAND_MAX)) * (v_x_max - v_x_min)) + v_x_min;
-	p.v_x += range_vx;*/
-	/*float range_vy = ((float(rand()) / float(RAND_MAX)) * (v_y_max - v_y_min)) + v_y_min;
-	p.v_y += range_vy;*/
+	float x_dist = (float)GetMouseX() - x;
+	float y_dist = (float)GetMouseY() - y;
+	float z_dist = sqrtf((x_dist * x_dist) + (y_dist * y_dist));
+	float v_x = x_dist / z_dist;
+	float v_y = y_dist / z_dist;
+	float speed_multi = 5.0f;
+	float range_vx = ((float(rand()) / float(RAND_MAX)) * (v_x_max - v_x_min)) + v_x_min;
+	float range_vy = ((float(rand()) / float(RAND_MAX)) * (v_y_max - v_y_min)) + v_y_min;
+	Particle p(x, y, (v_x * speed_multi) + range_vx, (v_y * speed_multi) + range_vy);
+	p.v_x += range_vx;
+	p.v_y += range_vy;
 	particles.push_back(p);
 }
 

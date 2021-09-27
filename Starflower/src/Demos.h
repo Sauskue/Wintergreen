@@ -158,7 +158,7 @@ public:
 	struct Particle
 	{
 	public:
-		Particle(float x, float y);
+		Particle(float x, float y, float v_x, float v_y);
 		
 		float x;
 		float y;
@@ -175,6 +175,11 @@ private:
 	const unsigned int width = 600;
 	const unsigned int height = 600;
 	const wchar_t* title = L"Particle Effects";
+
+	float x = width / 2;
+	float y = height - 50;
+
+	const float move_speed = 2.0f;
 
 	std::vector<Particle> particles = std::vector<Particle>();
 
