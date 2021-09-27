@@ -176,8 +176,8 @@ private:
 	const unsigned int height = 600;
 	const wchar_t* title = L"Particle Effects";
 
-	float x = width / 2;
-	float y = height - 50;
+	float x = (float)width / 2;
+	float y = (float)height - 50;
 
 	const float move_speed = 2.0f;
 

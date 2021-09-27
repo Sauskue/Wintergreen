@@ -20,7 +20,7 @@ void ParticleFX::OnCreate()
 {
 	SetSize(width, height);
 	SetTitle(title);
-	std::srand(time(0));
+	std::srand((unsigned int)time(0));
 	HRESULT hr = D2D1CreateFactory
 	(
 		D2D1_FACTORY_TYPE_SINGLE_THREADED,
@@ -38,7 +38,6 @@ void ParticleFX::OnCreate()
 		D2D1::ColorF(D2D1::ColorF::White),
 		&d2d1_brush
 	);
-	particles.push_back(Particle(x, y, 0, 0));
 }
 
 void ParticleFX::OnUpdate()
@@ -51,7 +50,25 @@ void ParticleFX::OnUpdate()
 		y -= move_speed;
 	if (IsKeyPressed(KeyCode::S))
 		y += move_speed;
+	if (IsKeyPressed(KeyCode::Q))
+	{
+		v_x_max -= .01f;
+		if (v_x_max <= 0.2f)
+			v_x_max = 0.2f;
+		v_x_min += .01f;
+		if (v_x_min >= -0.2f)
+			v_x_min = -0.2f;
+	}
+	if (IsKeyPressed(KeyCode::E))
+	{
+		v_x_max += .01f;
+		if (v_x_max >= 2.0f)
+			v_x_max = 2.0f;
+		v_x_min -= .01f;
+		if (v_x_min <= -2.0f)
+			v_x_min = -2.0f;
 
+	}
 	for (unsigned int i = 0; i < particles.size(); i++)
 	{
 		Particle& p = particles.at(i);
@@ -92,6 +109,13 @@ void ParticleFX::OnRender()
 		d2d1_brush->SetOpacity(p.opacity);
 		d2d1_rt->FillEllipse(e, d2d1_brush);
 	}
+	D2D1_ELLIPSE e;
+	e.point.x = x;
+	e.point.y = y;
+	e.radiusX = 10;
+	e.radiusY = 10;
+	d2d1_brush->SetOpacity(1.0f);
+	d2d1_rt->FillEllipse(e, d2d1_brush);
 	d2d1_rt->EndDraw();
 }
 
