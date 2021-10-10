@@ -192,3 +192,57 @@ private:
 	void OnRender() override;
 	void OnDestroy() override;
 };
+
+class Pong : public Application
+{
+public:
+	struct Paddle
+	{
+		void Show(ID2D1HwndRenderTarget*, ID2D1SolidColorBrush*);
+		void Move();
+
+		float x;
+		float y;
+		float dx;
+		float dy;
+		const float width = 15.0f;
+		const float height = 80.0f;
+	};
+
+	struct Puck
+	{
+		void Show(ID2D1HwndRenderTarget*, ID2D1SolidColorBrush*);
+		void Move();
+
+		float x;
+		float y;
+		float dx;
+		float dy;
+		const float radius = 9.0f;
+	};
+protected:
+private:
+	//variables
+	Paddle player_paddle;
+	Paddle enemy_paddle;
+	Puck puck;
+
+	const unsigned int width = 800;
+	const unsigned int height = 600;
+	const float paddle_speed = 5.0f;
+
+	int player_score = 0;
+	int enemy_score = 0;
+
+	ID2D1Factory* d2d1_factory = nullptr;
+	ID2D1HwndRenderTarget* d2d1_rt = nullptr;
+	ID2D1SolidColorBrush* d2d1_brush = nullptr;
+	IDWriteFactory* dwrite_factory = nullptr;
+	IDWriteTextFormat* dwrite_tf = nullptr;
+	ID2D1StrokeStyle* d2d1_ss = nullptr;
+	//methods
+	void OnCreate() override;
+	void OnUpdate() override;
+	void OnRender() override;
+	void OnDestroy() override;
+};

@@ -17,6 +17,7 @@ int main()
 		std::cout << "3) Game of Life\n";
 		std::cout << "4) A*\n";
 		std::cout << "5) Particle Effects\n";
+		std::cout << "6) Pong\n";
 
 		std::cout << "\nPick a demo: ";
 		int i = 0;
@@ -56,6 +57,13 @@ int main()
 				ParticleFX* pfx_demo = new ParticleFX();
 				pfx_demo->Run();
 				delete pfx_demo;
+				break;
+			}
+			case 6:
+			{
+				Pong* pong_demo = new Pong();
+				pong_demo->Run();
+				delete pong_demo;
 				break;
 			}
 			default:

@@ -40,6 +40,9 @@
     <ClCompile Include="src\ParticleFX.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Pong.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\pch.h">
