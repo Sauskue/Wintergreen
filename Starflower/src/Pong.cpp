@@ -175,8 +175,10 @@ void Pong::OnUpdate()
 			puck.x = player_paddle.x + player_paddle.width + puck.radius;
 		}
 		else
+		{
 			paddle = &enemy_paddle;
-
+			puck.x = enemy_paddle.x - (puck.radius * 2);
+		}
 		float dist = puck.y - (paddle->y + (paddle->height / 2));
 		float abs_dist = abs(dist);
 		abs_dist /= (paddle->height / 2);
