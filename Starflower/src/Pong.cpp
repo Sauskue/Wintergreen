@@ -180,7 +180,7 @@ void Pong::OnUpdate()
 		float dist = puck.y - (paddle->y + (paddle->height / 2));
 		float abs_dist = abs(dist);
 		abs_dist /= (paddle->height / 2);
-		abs_dist *= (PI / 4);
+		abs_dist *= (PI / 3.5);
 		float new_dx = cos(abs_dist);
 		float new_dy = sin(abs_dist);
 		if (puck.dx > 0)
