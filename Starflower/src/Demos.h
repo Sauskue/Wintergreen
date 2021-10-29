@@ -229,7 +229,7 @@ private:
 
 	const unsigned int width = 800;
 	const unsigned int height = 600;
-	const float paddle_speed = 5.0f;
+	const float paddle_speed = 7.5f;
 
 	int player_score = 0;
 	int enemy_score = 0;

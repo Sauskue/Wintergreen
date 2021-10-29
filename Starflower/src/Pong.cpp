@@ -8,8 +8,8 @@ void reset(Pong::Puck& puck, int width, int height)
 {
 	puck.x = (float)width / 2;
 	puck.y = (float)height / 2;
-	int start_angle_deg = (std::rand() % 91) - 45; //[-45, 45] degrees
-	float start_angle_rad = start_angle_deg * (PI / 180.0f); //[22PI/180, 67PI/180] rad
+	int start_angle_deg = (std::rand() % 121) - 60; //[-60, 60] degrees
+	float start_angle_rad = start_angle_deg * (PI / 180.0f); //[-PI/3, PI/3] rad
 	bool start_dir_x = std::rand() % 2; //0 = left, 1 = right
 	puck.dx = cos(start_angle_rad);
 	puck.dx *= SPEED_MULT;
@@ -182,7 +182,7 @@ void Pong::OnUpdate()
 		float dist = puck.y - (paddle->y + (paddle->height / 2));
 		float abs_dist = abs(dist);
 		abs_dist /= (paddle->height / 2);
-		abs_dist *= (PI / 3.5);
+		abs_dist *= (PI / 3.25);
 		float new_dx = cos(abs_dist);
 		float new_dy = sin(abs_dist);
 		if (puck.dx > 0)
