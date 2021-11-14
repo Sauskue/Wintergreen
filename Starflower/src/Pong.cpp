@@ -4,10 +4,10 @@
 #define PI 3.14159274101257324219f
 #define SPEED_MULT 7.5f
 
-void reset(Pong::Puck& puck, int width, int height)
+void Pong::Reset()
 {
-	puck.x = (float)width / 2;
-	puck.y = (float)height / 2;
+	puck.x = (float)width / 2 - puck.radius;
+	puck.y = (float)height / 2 - puck.radius;
 	int start_angle_deg = (std::rand() % 121) - 60; //[-60, 60] degrees
 	float start_angle_rad = start_angle_deg * (PI / 180.0f); //[-PI/3, PI/3] rad
 	bool start_dir_x = std::rand() % 2; //0 = left, 1 = right
@@ -17,6 +17,100 @@ void reset(Pong::Puck& puck, int width, int height)
 		puck.dx *= -1;
 	puck.dy = sin(start_angle_rad);
 	puck.dy *= SPEED_MULT;
+}
+
+void Pong::UpdatePlayerPaddle()
+{
+	if (IsKeyPressed(KeyCode::S) || IsKeyPressed(KeyCode::Down))
+		player_paddle.dy = paddle_speed;
+	else if (IsKeyPressed(KeyCode::W) || IsKeyPressed(KeyCode::Up))
+		player_paddle.dy = -paddle_speed;
+	else
+		player_paddle.dy = 0;
+	player_paddle.Move();
+	if (player_paddle.y <= 0.0f)
+		player_paddle.y = 0.0f;
+	if (player_paddle.y + player_paddle.height >= height)
+		player_paddle.y = height - player_paddle.height;
+}
+
+void Pong::UpdateEnemyPaddle()
+{
+	float dist_to_puck = enemy_paddle.y + (enemy_paddle.height / 2) - puck.y + puck.radius;
+	if (dist_to_puck > 0)
+		enemy_paddle.dy = -paddle_speed;
+	else if (dist_to_puck > 0)
+		enemy_paddle.dy = paddle_speed;
+	else
+		enemy_paddle.dy = 0;
+	enemy_paddle.Move();
+	if (enemy_paddle.y <= 0.0f)
+		enemy_paddle.y = 0.0f;
+	if (enemy_paddle.y + enemy_paddle.height >= height)
+		enemy_paddle.y = height - enemy_paddle.height;
+}
+
+void Pong::UpdatePuck()
+{
+	puck.Move();
+	if (puck.y <= 0 || puck.y + puck.radius * 2 >= height)
+		puck.dy *= -1;
+
+	enum
+	{
+		NO_HIT,
+		PLAYER_HIT,
+		ENEMY_HIT
+	};
+
+	int hit = NO_HIT;
+	if
+		(
+			puck.x <= player_paddle.x + player_paddle.width
+			&& puck.x >= 0
+			&& puck.y <= player_paddle.y + player_paddle.height
+			&& puck.y + (puck.radius * 2) >= player_paddle.y
+		)
+		hit = PLAYER_HIT;
+	if
+		(
+			puck.x + (puck.radius * 2) >= enemy_paddle.x
+			&& puck.x + (puck.radius * 2) <= width
+			&& puck.y <= enemy_paddle.y + enemy_paddle.height
+			&& puck.y + (puck.radius * 2) >= enemy_paddle.y
+		)
+		hit = ENEMY_HIT;
+
+	if (hit != NO_HIT)
+	{
+		Paddle* paddle;
+		if (hit == PLAYER_HIT)
+		{
+			paddle = &player_paddle;
+			puck.x = player_paddle.x + player_paddle.width;
+		}
+		else
+		{
+			paddle = &enemy_paddle;
+			puck.x = enemy_paddle.x - (puck.radius * 2);
+		}
+		float dist = (puck.y + puck.radius) - (paddle->y + (paddle->height / 2));
+		float abs_dist = abs(dist);
+		abs_dist /= (paddle->height / 2);
+		abs_dist *= (PI / 3.25f);
+		float new_dx = cos(abs_dist);
+		float new_dy = sin(abs_dist);
+		if (puck.dx > 0)
+		{
+			new_dx *= -1;
+		}
+		if (dist < 0)
+			new_dy *= -1;
+		puck.dx = new_dx;
+		puck.dy = new_dy;
+		puck.dx *= SPEED_MULT;
+		puck.dy *= SPEED_MULT;
+	}
 }
 
 void Pong::Paddle::Move()
@@ -121,91 +215,23 @@ void Pong::OnCreate()
 	puck.y = (float)height / 2;
 	
 	std::srand((unsigned int)std::time(0));
-	reset(puck, width, height);
+	Reset();
 }
 
 void Pong::OnUpdate()
 {
-	if (IsKeyPressed(KeyCode::S) || IsKeyPressed(KeyCode::Down))
-		player_paddle.dy = paddle_speed;
-	if (IsKeyPressed(KeyCode::W) || IsKeyPressed(KeyCode::Up))
-		player_paddle.dy = -paddle_speed;
-	if (!IsKeyPressed(KeyCode::W) && !IsKeyPressed(KeyCode::Up) && !IsKeyPressed(KeyCode::S) && !IsKeyPressed(KeyCode::Down))
-		player_paddle.dy = 0;
-	player_paddle.Move();
-	if (player_paddle.y <= 0.0f)
-		player_paddle.y = 0.0f;
-	if (player_paddle.y + player_paddle.height >= height)
-		player_paddle.y = height - player_paddle.height;
-	puck.Move();
-	if (puck.y <= 0 || puck.y >= height)
-		puck.dy *= -1;
-	
-	enum
-	{
-		NO_HIT,
-		PLAYER_HIT,
-		ENEMY_HIT
-	};
-
-	int hit = NO_HIT;
-	if
-		(
-			puck.x <= player_paddle.x + player_paddle.width
-			&& puck.x >= 0
-			&& puck.y <= player_paddle.y + player_paddle.height
-			&& puck.y >= player_paddle.y
-		)
-		hit = PLAYER_HIT;
-	if
-		(
-			puck.x >= enemy_paddle.x
-			&& puck.x <= width
-			&& puck.y >= enemy_paddle.y
-			&& puck.y <= enemy_paddle.y + enemy_paddle.height
-		)
-		hit = ENEMY_HIT;
-
-	if (hit != NO_HIT)
-	{
-		Paddle* paddle;
-		if (hit == PLAYER_HIT)
-		{
-			paddle = &player_paddle;
-			puck.x = player_paddle.x + player_paddle.width + puck.radius;
-		}
-		else
-		{
-			paddle = &enemy_paddle;
-			puck.x = enemy_paddle.x - (puck.radius * 2);
-		}
-		float dist = puck.y - (paddle->y + (paddle->height / 2));
-		float abs_dist = abs(dist);
-		abs_dist /= (paddle->height / 2);
-		abs_dist *= (PI / 3.25);
-		float new_dx = cos(abs_dist);
-		float new_dy = sin(abs_dist);
-		if (puck.dx > 0)
-		{
-			new_dx *= -1;
-		}
-		if (dist < 0)
-			new_dy *= -1;
-		puck.dx = new_dx;
-		puck.dy = new_dy;
-		puck.dx *= SPEED_MULT;
-		puck.dy *= SPEED_MULT;
-	}
-
+	UpdatePlayerPaddle();
+	UpdateEnemyPaddle();
+	UpdatePuck();
 	
 	if (puck.x <= 0)
 	{
-		reset(puck, width, height);
+		Reset();
 		enemy_score++;
 	}
-	if (puck.x >= width)
+	if (puck.x + (puck.radius * 2) >= width)
 	{
-		reset(puck, width, height);
+		Reset();
 		player_score++;
 	}
 }

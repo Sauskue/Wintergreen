@@ -229,7 +229,7 @@ private:
 
 	const unsigned int width = 800;
 	const unsigned int height = 600;
-	const float paddle_speed = 7.5f;
+	const float paddle_speed = 7.0f;
 
 	int player_score = 0;
 	int enemy_score = 0;
@@ -245,4 +245,9 @@ private:
 	void OnUpdate() override;
 	void OnRender() override;
 	void OnDestroy() override;
+
+	void Reset();
+	void UpdatePlayerPaddle();
+	void UpdateEnemyPaddle();
+	void UpdatePuck();
 };
