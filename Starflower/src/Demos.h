@@ -211,7 +211,7 @@ public:
 
 	struct Puck
 	{
-		void Show(ID2D1HwndRenderTarget*, ID2D1SolidColorBrush*);
+		void Show(ID2D1HwndRenderTarget*, ID2D1SolidColorBrush*, D2D1::ColorF color = D2D1::ColorF::White);
 		void Move();
 
 		float x;
@@ -219,6 +219,8 @@ public:
 		float dx;
 		float dy;
 		const float radius = 9.0f;
+
+		Puck& operator=(const Puck& other);
 	};
 protected:
 private:
@@ -226,6 +228,7 @@ private:
 	Paddle player_paddle;
 	Paddle enemy_paddle;
 	Puck puck;
+	Paddle* last_hit;
 
 	const unsigned int width = 800;
 	const unsigned int height = 600;

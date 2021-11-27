@@ -17,6 +17,7 @@ void Pong::Reset()
 		puck.dx *= -1;
 	puck.dy = sin(start_angle_rad);
 	puck.dy *= SPEED_MULT;
+	last_hit = nullptr;
 }
 
 void Pong::UpdatePlayerPaddle()
@@ -37,12 +38,12 @@ void Pong::UpdatePlayerPaddle()
 void Pong::UpdateEnemyPaddle()
 {
 	float dist_to_puck = enemy_paddle.y + (enemy_paddle.height / 2) - puck.y + puck.radius;
-	if (dist_to_puck > 0)
+	if (dist_to_puck > 5.0f)
 		enemy_paddle.dy = -paddle_speed;
-	else if (dist_to_puck > 0)
+	else if (dist_to_puck < -5.0f)
 		enemy_paddle.dy = paddle_speed;
-	else
-		enemy_paddle.dy = 0;
+	/*else
+		enemy_paddle.dy = 0;*/
 	enemy_paddle.Move();
 	if (enemy_paddle.y <= 0.0f)
 		enemy_paddle.y = 0.0f;
@@ -53,7 +54,7 @@ void Pong::UpdateEnemyPaddle()
 void Pong::UpdatePuck()
 {
 	puck.Move();
-	if (puck.y <= 0 || puck.y + puck.radius * 2 >= height)
+	if (puck.y <= 0 || puck.y + (puck.radius * 2) >= height)
 		puck.dy *= -1;
 
 	enum
@@ -94,6 +95,7 @@ void Pong::UpdatePuck()
 			paddle = &enemy_paddle;
 			puck.x = enemy_paddle.x - (puck.radius * 2);
 		}
+		last_hit = paddle;
 		float dist = (puck.y + puck.radius) - (paddle->y + (paddle->height / 2));
 		float abs_dist = abs(dist);
 		abs_dist /= (paddle->height / 2);
@@ -130,15 +132,25 @@ void Pong::Paddle::Show(ID2D1HwndRenderTarget* d2d1_rt, ID2D1SolidColorBrush* d2
 	d2d1_rt->FillRectangle(paddle_rect, d2d1_brush);
 }
 
+Pong::Puck& Pong::Puck::operator=(const Puck& other)
+{
+	this->x = other.x;
+	this->y = other.y;
+	this->dx = other.dx;
+	this->dy = other.dy;
+
+	return *this;
+}
+
 void Pong::Puck::Move()
 {
 	x += dx;
 	y += dy;
 }
 
-void Pong::Puck::Show(ID2D1HwndRenderTarget* d2d1_rt, ID2D1SolidColorBrush* d2d1_brush)
+void Pong::Puck::Show(ID2D1HwndRenderTarget* d2d1_rt, ID2D1SolidColorBrush* d2d1_brush, D2D1::ColorF color)
 {
-	d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::White));
+	d2d1_brush->SetColor(D2D1::ColorF(color));
 	D2D1_ELLIPSE puck_e;
 	puck_e.point.x = x;
 	puck_e.point.y = y;
@@ -262,6 +274,7 @@ void Pong::OnRender()
 	std::wstring temp2 = std::to_wstring(enemy_score);
 	const wchar_t* e_score_txt = temp2.c_str();
 
+	d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::White));
 	d2d1_brush->SetOpacity(0.75f);
 	d2d1_rt->DrawText
 	(
