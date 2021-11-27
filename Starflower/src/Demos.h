@@ -106,8 +106,8 @@ public:
 		
 		int x;
 		int y;
-		unsigned int local_goal;
-		unsigned int global_goal;
+		float local_goal;
+		float global_goal;
 		bool visited;
 		Node* parent;
 		std::vector<Node*> neighbors;
@@ -126,6 +126,8 @@ private:
 	static const int node_radius = 10;
 	static const int node_border = node_radius * 10;
 	static const int selection_node_radius = node_radius + 5;
+
+	bool quick_mode = false;
 
 	Node* start_node;
 	Node* end_node;
@@ -150,13 +152,105 @@ private:
 	void RunAlgorithm();
 };
 
-class ParticleEffects : public Application
+class ParticleFX : public Application
 {
 public:
+	struct Particle
+	{
+	public:
+		Particle(float x, float y, float v_x, float v_y);
+		
+		float x;
+		float y;
+		float v_x;
+		float v_y;
+
+		float opacity;
+	protected:
+	private:
+	};
+
 protected:
 private:
+	const unsigned int width = 600;
+	const unsigned int height = 600;
+	const wchar_t* title = L"Particle Effects";
+
+	float x = (float)width / 2;
+	float y = (float)height - 50;
+
+	const float move_speed = 2.0f;
+
+	std::vector<Particle> particles = std::vector<Particle>();
+
+	ID2D1Factory* d2d1_factory = nullptr;
+	ID2D1HwndRenderTarget* d2d1_rt = nullptr;
+	ID2D1SolidColorBrush* d2d1_brush = nullptr;
+
 	void OnCreate() override;
 	void OnUpdate() override;
 	void OnRender() override;
 	void OnDestroy() override;
+};
+
+class Pong : public Application
+{
+public:
+	struct Paddle
+	{
+		void Show(ID2D1HwndRenderTarget*, ID2D1SolidColorBrush*);
+		void Move();
+
+		float x;
+		float y;
+		float dx;
+		float dy;
+		const float width = 15.0f;
+		const float height = 80.0f;
+	};
+
+	struct Puck
+	{
+		void Show(ID2D1HwndRenderTarget*, ID2D1SolidColorBrush*, D2D1::ColorF color = D2D1::ColorF::White);
+		void Move();
+
+		float x;
+		float y;
+		float dx;
+		float dy;
+		const float radius = 9.0f;
+
+		Puck& operator=(const Puck& other);
+	};
+protected:
+private:
+	//variables
+	Paddle player_paddle;
+	Paddle enemy_paddle;
+	Puck puck;
+	Paddle* last_hit;
+
+	const unsigned int width = 800;
+	const unsigned int height = 600;
+	const float paddle_speed = 7.0f;
+
+	int player_score = 0;
+	int enemy_score = 0;
+
+	ID2D1Factory* d2d1_factory = nullptr;
+	ID2D1HwndRenderTarget* d2d1_rt = nullptr;
+	ID2D1SolidColorBrush* d2d1_brush = nullptr;
+	IDWriteFactory* dwrite_factory = nullptr;
+	IDWriteTextFormat* dwrite_tf = nullptr;
+	ID2D1StrokeStyle* d2d1_ss = nullptr;
+	//methods
+	void OnCreate() override;
+	void OnUpdate() override;
+	void OnRender() override;
+	void OnDestroy() override;
+
+	void Reset();
+	void UpdatePlayerPaddle();
+	void UpdateEnemyPaddle();
+	void UpdatePuck();
 };

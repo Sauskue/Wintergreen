@@ -37,7 +37,10 @@
     <ClCompile Include="src\AStar.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ParticleEffects.cpp">
+    <ClCompile Include="src\ParticleFX.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pong.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

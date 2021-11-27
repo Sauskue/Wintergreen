@@ -135,6 +135,8 @@ public:
 	bool IsLeftDown() const;
 	bool IsMiddleDown() const;
 	bool IsRightDown() const;
+	int GetX() const;
+	int GetY() const;
 protected:
 private:
 	const int wheel_delta = 120;
@@ -217,6 +219,9 @@ protected:
 	bool IsMouseMiddleDown() const;
 	bool IsMouseRightDown() const;
 	bool IsEventBufferEmpty() const;
+	
+	int GetMouseX() const;
+	int GetMouseY() const;
 
 	void SetPos(int x, int y);
 	void SetSize(unsigned int width, unsigned int height);
