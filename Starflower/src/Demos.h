@@ -254,3 +254,26 @@ private:
 	void UpdateEnemyPaddle();
 	void UpdatePuck();
 };
+
+class Snake : public Application
+{
+private:
+	const unsigned int width = 800;
+	const unsigned int height = 600;
+
+	const unsigned int spacing = 20;
+
+	unsigned int score = 0;
+
+	ID2D1Factory* d2d1_factory = nullptr;
+	ID2D1HwndRenderTarget* d2d1_rt = nullptr;
+	ID2D1SolidColorBrush* d2d1_brush = nullptr;
+	IDWriteFactory* dwrite_factory = nullptr;
+	IDWriteTextFormat* dwrite_tf = nullptr;
+	ID2D1StrokeStyle* d2d1_ss = nullptr;
+
+	void OnCreate() override;
+	void OnUpdate() override;
+	void OnRender() override;
+	void OnDestroy() override;
+};

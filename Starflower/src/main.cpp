@@ -18,6 +18,7 @@ int main()
 		std::cout << "4) A*\n";
 		std::cout << "5) Particle Effects\n";
 		std::cout << "6) Pong\n";
+		std::cout << "7) Snake\n";
 
 		std::cout << "\nPick a demo: ";
 		int i = 0;
@@ -64,6 +65,13 @@ int main()
 				Pong* pong_demo = new Pong();
 				pong_demo->Run();
 				delete pong_demo;
+				break;
+			}
+			case 7:
+			{
+				Snake* snake_demo = new Snake();
+				snake_demo->Run();
+				delete snake_demo;
 				break;
 			}
 			default:
