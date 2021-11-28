@@ -258,11 +258,14 @@ private:
 class Snake : public Application
 {
 private:
-	bool game_started = false;
+	bool playing = false;
 
 	const unsigned int width = 800;
 	const unsigned int height = 600;
 	const unsigned int spacing = 20;
+
+	int player_x;
+	int player_y;
 
 	unsigned int score = 0;
 

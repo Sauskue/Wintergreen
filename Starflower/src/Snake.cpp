@@ -56,17 +56,25 @@ void Snake::OnCreate()
 		NULL,
 		&d2d1_ss
 	);
+
+	std::srand((unsigned int)std::time(0));
 }
 
 void Snake::OnUpdate()
 {
-	while (!IsEventBufferEmpty())
+	if(IsKeyPressed(KeyCode::Space))
+		if (!playing)
+		{
+			player_x = std::rand() % width;
+			player_x -= (player_x % spacing);
+			player_y = std::rand() % height;
+			player_y -= (player_y % spacing);
+			playing = true;
+		}
+
+	if (playing)
 	{
-		Event e = ReadEventBuffer();
-		if (e.GetType() == Event::Type::KeyPress)
-			if (e.GetKeyCode() == KeyCode::Space)
-				if (!game_started)
-					game_started = true;
+
 	}
 }
 
@@ -111,21 +119,33 @@ void Snake::OnRender()
 		DWRITE_MEASURING_MODE_NATURAL
 	);
 
-	const wchar_t* start_text = L"PRESS SPACE TO START";
 
-	if(!game_started)
+	if (!playing)
+	{
+		const wchar_t* start_text = L"PRESS SPACE TO START";
 		d2d1_rt->DrawText
 		(
 			start_text,
 			(UINT32)wcslen(start_text),
 			dwrite_tf,
-			D2D1::RectF((float)width*2/7, float(height)*2/5, (float)width*2/7 + 350.0f, (float)height*2/5 + 50.0f),
+			D2D1::RectF((float)width * 2 / 7, float(height) * 2 / 5, (float)width * 2 / 7 + 350.0f, (float)height * 2 / 5 + 50.0f),
 			d2d1_brush,
 			D2D1_DRAW_TEXT_OPTIONS_NONE,
 			DWRITE_MEASURING_MODE_NATURAL
-	
-		);
 
+		);
+	}
+	else
+	{
+		d2d1_brush->SetOpacity(1.0f);
+		d2d1_brush->SetColor(D2D1::ColorF(D2D1::ColorF::LimeGreen));
+		D2D1_RECT_F rect;
+		rect.left = player_x;
+		rect.top = player_y;
+		rect.right = player_x + spacing;
+		rect.bottom = player_y + spacing;
+		d2d1_rt->FillRectangle(rect, d2d1_brush);
+	}
 	d2d1_rt->EndDraw();
 }
 

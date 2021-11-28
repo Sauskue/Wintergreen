@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "Demos.h"
 
-// TODO: how do you handle rendering to multiple windows???
-// TODO: create graphics framework
+//TODO: framerate locking?
+//TODO: how do you handle rendering to multiple windows???
+//TODO: create graphics framework
 
 int main()
 {
