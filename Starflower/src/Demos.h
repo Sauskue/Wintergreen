@@ -258,9 +258,10 @@ private:
 class Snake : public Application
 {
 private:
+	bool game_started = false;
+
 	const unsigned int width = 800;
 	const unsigned int height = 600;
-
 	const unsigned int spacing = 20;
 
 	unsigned int score = 0;

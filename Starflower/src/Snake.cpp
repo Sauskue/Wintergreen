@@ -63,10 +63,10 @@ void Snake::OnUpdate()
 	while (!IsEventBufferEmpty())
 	{
 		Event e = ReadEventBuffer();
-		if (e.GetType() == Event::Type::MouseLeftPress)
-			score++;
-		else if (e.GetType() == Event::Type::MouseRightPress)
-			score--;
+		if (e.GetType() == Event::Type::KeyPress)
+			if (e.GetKeyCode() == KeyCode::Space)
+				if (!game_started)
+					game_started = true;
 	}
 }
 
@@ -105,11 +105,26 @@ void Snake::OnRender()
 		score_text,
 		(UINT32)wcslen(score_text),
 		dwrite_tf,
-		D2D1::RectF((float)width - 50.0f, 0.0f, (float)width, 50.0f),
+		D2D1::RectF(0.0f, 0.0f, (float)width, 50.0f),
 		d2d1_brush,
 		D2D1_DRAW_TEXT_OPTIONS_NONE,
 		DWRITE_MEASURING_MODE_NATURAL
 	);
+
+	const wchar_t* start_text = L"PRESS SPACE TO START";
+
+	if(!game_started)
+		d2d1_rt->DrawText
+		(
+			start_text,
+			(UINT32)wcslen(start_text),
+			dwrite_tf,
+			D2D1::RectF((float)width*2/7, float(height)*2/5, (float)width*2/7 + 350.0f, (float)height*2/5 + 50.0f),
+			d2d1_brush,
+			D2D1_DRAW_TEXT_OPTIONS_NONE,
+			DWRITE_MEASURING_MODE_NATURAL
+	
+		);
 
 	d2d1_rt->EndDraw();
 }
