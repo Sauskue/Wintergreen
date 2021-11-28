@@ -1,10 +1,6 @@
 #include "pch.h"
 #include "Demos.h"
 
-// TODO: ParticleFX
-// TODO: Pong
-// TODO:
-// 
 // TODO: how do you handle rendering to multiple windows???
 // TODO: create graphics framework
 
